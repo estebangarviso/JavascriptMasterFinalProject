@@ -1,5 +1,11 @@
-#right-column {
-  position: fixed;
-  top: 0;
-  right: 0;
+// Fixed right column for medium devices
+@include media-breakpoint-up(md) {
+  #right-column {
+    position: fixed;
+    top: 0;
+    right: 0;
+  }
+}
+#shopping-cart-wrapper {
+  width: 100%;
 }

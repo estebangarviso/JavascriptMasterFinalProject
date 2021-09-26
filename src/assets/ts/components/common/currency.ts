@@ -3,13 +3,13 @@ import Component from '@helpers/Component'
 import Data from '@helpers/Data'
 
 export default class Currency extends Component implements CurrencyInterface {
-  public id_currency: number = 0
-  public iso_lang: string = ''
-  public label: string = ''
-  public symbol: string = ''
-  public position: string = ''
-  public decimals: number = 0
-  public value: number = 0
+  public id_currency: number
+  public iso_lang: string
+  public label: string
+  public symbol: string
+  public position: string
+  public decimals: number
+  public value: number
   private data: Data
 
   constructor(data: Data) {
@@ -25,6 +25,16 @@ export default class Currency extends Component implements CurrencyInterface {
     this.value = currency.value
   }
 
+  private set currency(params: CurrencyInterface) {
+    this.id_currency = params.id_currency
+    this.iso_lang = params.iso_lang
+    this.label = params.label
+    this.symbol = params.symbol
+    this.position = params.position
+    this.decimals = params.decimals
+    this.value = params.value
+  }
+
   /**
    * Format amount to currency.
    * Thousand separator equals to dot for all spanish languages, others with comma.
@@ -34,6 +44,7 @@ export default class Currency extends Component implements CurrencyInterface {
    */
   public format(amount: number): string {
     let result
+    amount = +amount.toFixed(this.decimals)
     let parts = (amount + '').split('.'),
       integer = parts[0],
       decimal = parts[1],
@@ -42,10 +53,9 @@ export default class Currency extends Component implements CurrencyInterface {
     if (iso_code.substring(0, 2) === 'es') {
       result = integer.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
     } else {
-      result = `${integer.replace(
-        /\B(?=(\d{3})+(?!\d))/g,
-        ','
-      )}<sup>${decimal.substring(0, this.decimals)}</sup>`
+      result = `${integer.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}${
+        decimal ? `<sup>${decimal}</sup>` : ''
+      }`
     }
     result = result || (+amount).toLocaleString(iso_code)
     if (position === 'left')
@@ -71,26 +81,31 @@ export default class Currency extends Component implements CurrencyInterface {
   }
 
   public init(): void {
+    const element = document.getElementById('js-currency')
     this.updateById(this.id_currency)
+    if (element) {
+      const currency: CurrencyInterface = JSON.parse(
+        localStorage.getItem('currency')
+      )
+      if (currency)
+        (element as HTMLInputElement).value = currency.id_currency + ''
+
+      element.addEventListener('change', (event) => {
+        this.updateById(+(event.target as HTMLInputElement).value)
+      })
+    }
   }
   /**
    * @desc Update currency by ID
    * @param {number} id_currency - Currency ID
    */
   public updateById(id_currency: number) {
-    if (id_currency === this.id_currency) {
-      this.refresh()
-      return
-    }
-    const currency = this.data.getCurrencyById(id_currency)
     const element = document.getElementById('js-currency')
+    const currency = this.data.getCurrencyById(id_currency)
     if (currency && element) {
       localStorage.setItem('currency', JSON.stringify(currency))
+      this.currency = currency
       this.refresh()
-      let event = new CustomEvent('updatedCurrency', {
-        detail: { currency: currency },
-      })
-      element.addEventListener('change', (e) => e.target.dispatchEvent(event))
     }
   }
 }

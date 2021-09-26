@@ -24,6 +24,7 @@
                     {{{block 'right_column'}}}
                         <div id="right-column" class="col-12 col-md-4">
                             {{{block name='right_column_content'}}}
+                                {{include file='src/templates/partials/currency-selector.tpl'}}
                                 {{include file='src/templates/authentication.tpl'}}
                                 {{include file='src/templates/shoppingcart.tpl'}}
                             {{{/block}}}
