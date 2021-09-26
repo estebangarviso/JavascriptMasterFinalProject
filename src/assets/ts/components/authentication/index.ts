@@ -8,12 +8,16 @@ export default class AuthenticationForm extends AbstractForm {
   private _format: FormField[] = []
   private data: Data
   private _isLogged: boolean = false
+
   public get isLogged(): boolean {
+    let customerPersist = JSON.parse(localStorage.getItem('isLogged'))
+    if (customerPersist) this.isLogged = customerPersist
     return this._isLogged
   }
   private set isLogged(isLogged: boolean) {
     this._isLogged = isLogged
   }
+  // Demo Customer
   private customer?: CustomerInterface
 
   /**
@@ -34,6 +38,7 @@ export default class AuthenticationForm extends AbstractForm {
     format.push(email)
 
     password.name = 'password'
+    password.type = 'password'
     password.label = 'Contraseña'
     password.restrictions = ['isPassword']
     password.required = true
@@ -51,6 +56,7 @@ export default class AuthenticationForm extends AbstractForm {
   constructor(data: Data) {
     super()
     this.data = data
+    this.customer = this.data.getCustomerByEmail('demo@demo.com')
   }
 
   init() {
@@ -67,7 +73,9 @@ export default class AuthenticationForm extends AbstractForm {
         event.preventDefault()
         const target = event.target as HTMLFormElement
         const isValid = this.validate(target)
-        console.log({ isValid })
+        if (isValid) {
+          this.logIn(this.getValue('email'))
+        }
       })
     }
   }
@@ -102,52 +110,82 @@ export default class AuthenticationForm extends AbstractForm {
     return result && !!result.id_customer
   }
 
-  private addValues(form: HTMLFormElement) {
+  private addValues(form?: HTMLFormElement) {
     let newFormat: FormField[] = []
-    this.format.forEach((field) => {
-      const input = form.querySelector(
-        `[name=${field.name}]`
-      ) as HTMLInputElement
-      field.value = input.value
-      newFormat.push(field)
-    })
-    this.format = []
-    this.format = newFormat
+    if (form) {
+      this.format.forEach((field) => {
+        const input = form.querySelector(
+          `[name=${field.name}]`
+        ) as HTMLInputElement
+        field.value = input.value
+        newFormat.push(field)
+      })
+      this.format = []
+      this.format = newFormat
+    }
   }
   public validate(form: HTMLFormElement) {
+    for (let field of this.format) {
+      field.errors = []
+    }
     // Add values to format
     this.addValues(form)
     // Proceed with validations
     const customerEmail = this.getValue('email')
     if (!this.customerExists(customerEmail)) {
       this.getField('email').addError('No esta registrado')
+      return false
+    } else {
+      this.getField('email').errors = []
     }
-    
+
     return super.validate(form)
+  }
+
+  private logIn(email: string) {
+    if (!this.isLogged) {
+      localStorage.setItem('isLogged', JSON.stringify(true))
+      this.isLogged = true
+      this.customer = this.data.getCustomerByEmail(email)
+      this.render()
+    }
   }
 
   public logOut() {
     if (this.isLogged) {
       localStorage.setItem('isLogged', JSON.stringify(false))
+      this.isLogged = false
       this.render()
     }
   }
 
   public render() {
-    document.getElementById(
-      'js-authentication'
-    ).innerHTML = `${this.renderAuthentication}${this.renderWelcome}`
+    document.getElementById('js-authentication').innerHTML = !this.isLogged
+      ? `${this.renderAuthentication}`
+      : `${this.renderWelcome}`
     this.addValues(
       document.getElementById('authentication-form') as HTMLFormElement
     )
+    const logout = document.getElementById('logout')
+    if (logout) logout.addEventListener('click', () => this.logOut())
+    if (!this.isLogged)
+      document.getElementById('shopping-cart-wrapper').classList.add('d-none')
+    else
+      document
+        .getElementById('shopping-cart-wrapper')
+        .classList.remove('d-none')
+    this.refresh()
   }
 
   private get renderWelcome() {
     if (this.customer && this.isLogged)
       return /* HTML */ `
         <h6 class="text-center">
-          Welcome ${this.customer.firstname} ${this.customer.lastname}
+          Bienvenido ${this.customer.firstname} ${this.customer.lastname}!
         </h6>
+        <button class="btn btn-secondary" id="logout" type="button">
+          Cerrar sesión
+        </button>
       `
     else return ''
   }

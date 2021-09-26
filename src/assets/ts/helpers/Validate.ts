@@ -9,7 +9,7 @@ export default class Validate {
    */
   public static isEmail(email: any): boolean {
     return (
-      !this.isEmpty(email) ||
+      email &&
       /^[a-z\p{L}0-9!#$%&'*+\/=?^`{}|~_-]+[.a-z\p{L}0-9!#$%&'*+\/=?^`{}|~_-]*@[a-z\p{L}0-9]+(?:[.]?[_a-z\p{L}0-9-])*\.[a-z\p{L}0-9]+$/iu.test(
         email
       )
@@ -62,6 +62,6 @@ export default class Validate {
    * @return {boolean}
    */
   public static isGenericName(name: any): boolean {
-    return this.isEmpty(name) || /^[^<>={}]*$/u.test(name)
+    return name && /^[^<>={}]*$/u.test(name)
   }
 }

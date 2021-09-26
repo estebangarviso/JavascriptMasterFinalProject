@@ -32,10 +32,9 @@ export default abstract class AbstractForm
 
   public validate(form: HTMLFormElement): boolean {
     for (let field of this.format) {
-      field.errors = []
       if (field.required && !field.value) {
         field.addError(ValidateRestriction.message('required'))
-        return false
+
         continue
       } else if (!field.required && !field.value) {
         continue
@@ -43,9 +42,10 @@ export default abstract class AbstractForm
 
       for (let restriction of field.restrictions) {
         if (typeof restriction !== 'number') {
-          if (Validate[restriction](field.value)) {
+          if (!Validate[restriction](field.value)) {
             field.addError(ValidateRestriction.message(restriction))
-            return false
+          } else {
+            field.errors = []
           }
         }
       }

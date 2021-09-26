@@ -70,6 +70,7 @@ export default class FormField extends Component {
   }
   public set errors(errors: string[]) {
     this._errors = errors
+    this.refreshErrors()
   }
   public addError(error: string) {
     this._errors.push(error)
