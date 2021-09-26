@@ -1,0 +1,20 @@
+[
+  {
+    "id_currency": 1,
+    "iso_lang": "es-CL",
+    "label": "CLP",
+    "symbol": "$",
+    "position": "left",
+    "decimals": 0,
+    "value": 1
+  },
+  {
+    "id_currency": 2,
+    "iso_lang": "en-US",
+    "label": "USD",
+    "symbol": "$",
+    "position": "left",
+    "decimals": 2,
+    "value": 0.0026666666666666667
+  }
+]

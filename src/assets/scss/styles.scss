@@ -1,0 +1,15 @@
+@import '~bourbon/core/bourbon';
+@import './_partials/variables';
+@import '~bootstrap/scss/bootstrap';
+
+/*** ICONS ***/
+@import '../fonts/fontawesome-pro/scss/fontawesome.scss';
+@import '../fonts/fontawesome-pro/scss/solid.scss';
+/*** COMPONENTS ***/
+@import './components/authentication';
+@import './components/products';
+@import './components/shoppingcart';
+@import './components/preloader';
+/*** CUSTOMS ***/
+@import './_partials/responsive';
+@import './_partials/fixes';
