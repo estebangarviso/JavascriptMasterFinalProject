@@ -28,13 +28,13 @@
     position: relative;
     display: -ms-flexbox;
     display: flex;
-    -ms-flex-align: stretch;
+    -ms-flex-align: center;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
-    align-items: stretch;
+    align-items: center;
+    justify-content: center;
     .input-group {
       width: auto;
-      margin-right: 5px;
     }
   }
 
@@ -80,6 +80,7 @@
     .input-group-add-cart {
       -ms-flex-wrap: nowrap;
       flex-wrap: nowrap;
+      margin-bottom: 5px;
     }
     .input-qty {
       min-width: 25px;
@@ -92,6 +93,9 @@
         margin: 0;
         -webkit-appearance: none;
       }
+    }
+    .add-to-cart {
+      width: 100%;
     }
   }
   .product-title {

@@ -34,7 +34,11 @@ export default class Catalog extends Component {
 
   private get renderProductList() {
     return /* HTML */ `<div class="products row products-grid">
-      ${this.products.map((product) => product.render()).join('')}
+      ${this.products
+        .map((product) => {
+          return product.render()
+        })
+        .join('')}
     </div>`
   }
 }

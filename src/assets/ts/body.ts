@@ -6,6 +6,7 @@ import Catalog from '@components/catalog'
 import Currency from '@components/common/currency'
 import Data from '@helpers/Data'
 import { fadeOut } from '@components/common/preloader'
+import Touchspin from '@components/common/touchspin'
 
 /**
  * Fetch Currency and Carrier before everything
@@ -43,7 +44,18 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   // Initializing components
   catalog.init()
+  let productMiniatures = document.querySelectorAll('.product-miniature')
   currency.init()
 
+  // Add Spinner to products input[type=number]
+  productMiniatures.forEach(
+    (product) =>
+      new Touchspin(
+        product.querySelector('.input-group-add-cart'),
+        '.input-qty',
+        '<i class="fas fa-minus touchspin-down"></i>',
+        '<i class="fas fa-plus touchspin-up"></i>'
+      )
+  )
   // Adding functionatities
 })

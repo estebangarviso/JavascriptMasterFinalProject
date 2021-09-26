@@ -89,6 +89,26 @@ export default class ProductMiniature
               <div class="product-price-and-shipping">
                 <span class="product-price" content="${this.price}"></span>
               </div>
+              <div class="product-add-cart">
+                <div class="input-group-add-cart">
+                  <input
+                    type="number"
+                    class="input-qty"
+                    name="qty"
+                    value="1"
+                    min="1"
+                  />
+                </div>
+                <button
+                  class="btn btn-secondary btn-product-list add-to-cart"
+                  data-button-action="add-to-cart"
+                  type="submit"
+                  disabled
+                >
+                  <i class="fas fa-shopping-cart fa-fw" aria-hidden="true"></i>
+                  Añadir al carro
+                </button>
+              </div>
             </div>
           </div>
         </div>

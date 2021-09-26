@@ -1,5 +1,3 @@
-import Component from '@helpers/Component'
-
 /**
  *  @class
  *  @function Touchspin
@@ -21,9 +19,9 @@ export default class Touchspin {
     decreaseHTML: string,
     increaseHTML: string
   ) {
+    let input: HTMLInputElement | undefined = undefined
     if (childInputClassName) {
-      let input: HTMLInputElement | null = self.closest(childInputClassName)
-      if (input) this.input = input
+      input = self.querySelector(childInputClassName)
     } else {
       this.input.value = '1'
       this.input.type = this.input.type || 'number'
@@ -32,14 +30,16 @@ export default class Touchspin {
     }
 
     // Get text for buttons
-    this.decreaseHTML = decreaseHTML
-    this.increaseHTML = increaseHTML
+    this.decreaseHTML = decreaseHTML || this.decreaseHTML
+    this.increaseHTML = increaseHTML || this.increaseHTML
     // Button constructor
     function Button(HTML: string, className: string) {
       const button = document.createElement('button')
       button.type = 'button'
       button.innerHTML = HTML
-      button.classList.add(className)
+      className = className.trim()
+      let _className = className.split(' ')
+      button.classList.add(..._className)
 
       return button
     }
@@ -52,20 +52,31 @@ export default class Touchspin {
       this.increaseHTML,
       'btn btn-touchspin js-touchspin bootstrap-touchspin-up'
     )
+    if (input) {
+      // Add functionality to buttons
+      this.down.addEventListener('click', () => this.change_quantity(-1, input))
+      this.up.addEventListener('click', () => this.change_quantity(1, input))
 
-    // Add functionality to buttons
-    this.down.addEventListener('click', () => this.change_quantity(-1))
-    this.up.addEventListener('click', () => this.change_quantity(1))
+      // Add input and buttons to wrapper
+      self.insertBefore(this.down, self.childNodes[0])
+      self.appendChild(this.up)
+    } else {
+      // Add functionality to buttons
+      this.down.addEventListener('click', () => this.change_quantity(-1))
+      this.up.addEventListener('click', () => this.change_quantity(1))
 
-    // Add input and buttons to wrapper
-    self.appendChild(this.down)
-    self.appendChild(this.input)
-    self.appendChild(this.up)
+      // Add input and buttons to wrapper
+      self.appendChild(this.down)
+      self.appendChild(this.input)
+      self.appendChild(this.up)
+    }
   }
 
-  public change_quantity(change: number) {
+  public change_quantity(change: number, input?: HTMLInputElement) {
     // Get current value
-    let quantity = Number(this.input.value)
+    let quantity: number
+    if (!input) quantity = Number(this.input.value)
+    else quantity = Number(input.value)
 
     // Ensure quantity is a valid number
     if (isNaN(quantity)) quantity = 1
@@ -77,7 +88,8 @@ export default class Touchspin {
     quantity = Math.max(quantity, 1)
 
     // Output number
-    this.input.value = quantity + ''
+    if (!input) this.input.value = quantity + ''
+    else input.value = quantity + ''
   }
 
   public init() {
