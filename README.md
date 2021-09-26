@@ -34,7 +34,12 @@ npm install
 
 ![GitHub branch checks state](https://img.shields.io/github/checks-status/estebangarviso/JavascriptMasterFinalProject/main?style=solid)
 
-### Skills 🛠️
+### Style Frameworks and Libraries 🛠️
+
+![Bootstrap](https://img.shields.io/badge/Bootstrap-v5.1.0-7952B3?style=solid&logoColor=ffffff&labelColor=7952B3&logo=bootstrap)
+![Font Awesome](https://img.shields.io/badge/FontAwesome-v5.15-339AF0?style=solid&labelColor=339AF0&logoColor=ffffff&logo=FontAwesome)
+
+### Skills Learned 🛠️
 
 ![Pure JavaScript](https://img.shields.io/badge/Pure%20Javascript--F7DF1E?style=solid&labelColor=F7DF1E&logoColor=000000&logo=JavaScript)
 ![ECMAScript 6 & 7](https://img.shields.io/badge/ECMAScript-6%20%26%207-F7DF1E?style=solid&labelColor=F7DF1E&logoColor=000000&logo=JavaScript)
@@ -42,11 +47,6 @@ npm install
 ![JS Asynchronous / Synchronous](https://img.shields.io/badge/JS%20Asynchronous%20%2F%20Synchronous--F7DF1E?style=solid&labelColor=F7DF1E&logoColor=000000&logo=JavaScript)
 ![Design Patterns and Classes](https://img.shields.io/badge/Design%20Patterns%20and%20Classes--F7DF1E?style=solid&labelColor=F7DF1E&logoColor=000000&logo=JavaScript)
 ![React / Angular Fundamentals](https://img.shields.io/badge/React%20%2F%20Angular%20Fundamentals--F7DF1E?style=solid&labelColor=F7DF1E&logoColor=000000&logo=JavaScript)
-
-### Style Frameworks and Libraries 🛠️
-
-![Bootstrap](https://img.shields.io/badge/Bootstrap-v4.6.0-7952B3?style=solid&logoColor=ffffff&labelColor=7952B3&logo=bootstrap)
-![Font Awesome](https://img.shields.io/badge/FontAwesome-v5.15-339AF0?style=solid&labelColor=339AF0&logoColor=ffffff&logo=FontAwesome)
 
 ### Contributions 🖇️
 
