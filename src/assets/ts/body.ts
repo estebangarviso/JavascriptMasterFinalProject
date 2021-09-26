@@ -61,7 +61,13 @@ document.addEventListener('DOMContentLoaded', async function () {
   )
   // Adding functionatities
   // Check if customer is logged
-  let isLogged = JSON.parse(localStorage.getItem('isLogged'))
+  const isLogged = JSON.parse(localStorage.getItem('isLogged'))
   // Hide cart if customer is not logged
   if (!isLogged) DOMComponents.cartWrapper.classList.add('d-none')
+  // Enable add to cart buttons if customer is logged
+  const addToCartBtns = document.querySelectorAll(
+    '.product-add-cart .add-to-cart'
+  )
+  if (addToCartBtns && isLogged)
+    addToCartBtns.forEach((btn) => btn.removeAttribute('disabled'))
 })

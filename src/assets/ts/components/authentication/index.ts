@@ -78,6 +78,14 @@ export default class AuthenticationForm extends AbstractForm {
         }
       })
     }
+    // Enable add to cart buttons if customer is logged
+    let addToCartBtns = document.querySelectorAll(
+      '.product-add-cart .add-to-cart'
+    )
+    if (addToCartBtns && this.isLogged)
+      addToCartBtns.forEach((btn) => btn.removeAttribute('disabled'))
+    else
+      addToCartBtns.forEach((btn) => btn.setAttribute('disabled', 'disabled'))
   }
   /**
    * TODO Session Check Method

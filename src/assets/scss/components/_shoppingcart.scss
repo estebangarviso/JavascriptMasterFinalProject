@@ -9,3 +9,20 @@
 #shopping-cart-wrapper {
   width: 100%;
 }
+.cart-products {
+  max-height: 380px;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  @media screen and (max-height: 770px) {
+    max-height: 245px;
+  }
+  &::-webkit-scrollbar-track {
+  }
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.25);
+  }
+}

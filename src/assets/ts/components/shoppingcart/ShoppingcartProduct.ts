@@ -56,7 +56,9 @@ export default class ShoppingcartProduct
   public set add(quantity: number) {
     this.cart_quantity += quantity
   }
-
+  public set fix(quantity: number) {
+    this.cart_quantity = quantity
+  }
   public refresh() {}
 
   public render() {
@@ -64,8 +66,7 @@ export default class ShoppingcartProduct
       <div class="col-3">
         <span class="product-image media-middle">
           <img src="${this.img}" alt="${this.name}" class="img-fluid" />
-          ></span
-        >
+        </span>
       </div>
       <div class="col col-info">
         <div class="pb-1"></div>
@@ -94,7 +95,10 @@ export default class ShoppingcartProduct
             />
           </div>
           <div class="col">
-            <span class="text-muted">x</span> <span>${this.price}</span>
+            <span class="text-muted">x</span>
+            <span class="product-price" content="${this.price_amount}"
+              >${this.price}</span
+            >
           </div>
 
           <div class="col col-auto">
@@ -105,7 +109,7 @@ export default class ShoppingcartProduct
               data-id-product="${this.id_product}"
               title="Eliminar del carro"
             >
-              <i class="fa fa-trash-o" aria-hidden="true"></i>
+              <i class="fas fa-trash" aria-hidden="true"></i>
             </a>
           </div>
         </div>

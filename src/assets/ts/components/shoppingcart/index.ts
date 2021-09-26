@@ -13,6 +13,7 @@ export default class Shoppingcart extends Component {
   private _products: ShoppingcartProduct[] = []
   private set products(cart_products: ShoppingcartProduct[]) {
     this._products = cart_products
+    this.refresh()
   }
   public get products() {
     return this._products
@@ -47,24 +48,55 @@ export default class Shoppingcart extends Component {
     this.currency = data.currency
     this.carrier = data.carrier
   }
-
+  public actions() {
+    // Enable add to cart buttons if customer is logged
+    const addToCartBtns = document.querySelectorAll(
+      '.product-add-cart .add-to-cart'
+    )
+    if (addToCartBtns)
+      addToCartBtns.forEach((btn) =>
+        btn.addEventListener(
+          'click',
+          (event) => {
+            const target = event.target as HTMLElement
+            const product = target.closest('.js-product-miniature')
+            const id_product = product.getAttribute('data-id-product')
+            const qty = (
+              product.querySelector('.input-qty') as HTMLInputElement
+            ).value
+            console.log(target)
+            this.addProduct(Number(id_product), Number(qty))
+          },
+          false
+        )
+      )
+    // Remove all products button
+    const removeAll = document.getElementById('shopping-cart-restore-btn')
+    if (removeAll)
+      removeAll.addEventListener('click', (event: Event) => {
+        this.products = []
+        this.refresh()
+      })
+  }
   public build() {
     let cart_products = Data.getCartProducts()
-    let products = cart_products.map((product) => {
-      let _product: ProductInterface = this.data.getProductById(
-        product.id_product
-      )
+    if (cart_products.length) {
+      let products = cart_products.map((product) => {
+        let _product: ProductInterface = this.data.getProductById(
+          product.id_product
+        )
+        let cart_product = new ShoppingcartProduct(
+          this.currency,
+          _product,
+          product.cart_quantity
+        )
 
-      return new ShoppingcartProduct(
-        this.currency,
-        _product,
-        product.cart_quantity
-      )
-    })
-
-    this.products = products
-    this.setQuantities()
-    this.setSubtotals()
+        return cart_product
+      })
+      this.products = products
+      this.setQuantities()
+      this.setSubtotals()
+    }
   }
 
   private setQuantities() {
@@ -84,7 +116,7 @@ export default class Shoppingcart extends Component {
         let amount = this.products.reduce(
             (accumulator, product) =>
               product.price_amount !== undefined
-                ? product.price_amount + accumulator
+                ? product.price_amount * product.cart_quantity + accumulator
                 : 0,
             0
           ),
@@ -115,15 +147,6 @@ export default class Shoppingcart extends Component {
   }
 
   public refresh() {
-    this.setQuantities()
-    this.setSubtotals()
-  }
-
-  public addProduct(id_product: number, quantity: number) {
-    let _product = this.data.getProductById(id_product)
-    let product = new ShoppingcartProduct(this.currency, _product, quantity)
-    this.products.push(product)
-
     localStorage.setItem(
       'cart_products',
       JSON.stringify(
@@ -135,6 +158,34 @@ export default class Shoppingcart extends Component {
         })
       )
     )
+    this.setQuantities()
+    this.setSubtotals()
+    this.render()
+    this.actions()
+  }
+
+  public addProduct(id_product: number, quantity: number) {
+    let _product = this.data.getProductById(id_product)
+    let product = new ShoppingcartProduct(this.currency, _product, quantity)
+    if (this.products && this.products.length) {
+      let cart_product = this.products.filter(
+        (product) => product.id_product === id_product
+      )[0]
+      console.log({
+        cart_product: cart_product,
+        qty: quantity,
+      })
+      if (cart_product) cart_product.fix = cart_product.cart_quantity + quantity
+
+      let rest_products = this.products.filter(
+        (product) => product.id_product !== id_product
+      )
+      if (cart_product) this.products = [...rest_products, cart_product]
+      else this.products = [...rest_products, product]
+    } else {
+      this.products.push(product)
+    }
+
     this.refresh()
   }
 
@@ -145,6 +196,7 @@ export default class Shoppingcart extends Component {
         continue
       }
     }
+    this.refresh()
   }
 
   public decreaseProduct(id_product: number) {
@@ -154,15 +206,24 @@ export default class Shoppingcart extends Component {
         continue
       }
     }
+    this.refresh()
   }
 
-  public deleteProduct(id_product: number) {
+  public removeProduct(id_product: number) {
     this.products.filter((product) => product.id_product !== id_product)
+    this.refresh()
+  }
+
+  public removeAll() {
+    this.products = []
+    localStorage.removeItem('cart_products')
+    this.refresh()
   }
 
   public init() {
     this.build()
     this.render()
+    this.actions()
   }
 
   public render() {
@@ -180,18 +241,56 @@ export default class Shoppingcart extends Component {
   private get renderProducts() {
     if (this.hasProducts) {
       return /* HTML */ `<ul class="cart-products">
-          <li>${this.products.map((product) => product.render)}</li>
+          ${this.products
+            .map((product) => `<li>${product.render()}</li>`)
+            .join('')}
         </ul>
+        <div class="row">
+          <div class="col col-12">
+            <div class="row col-12">
+              <div class="col col-6 h3 fw-bold">
+                ${this.subtotals.products.label}
+              </div>
+              <span
+                class="col col-6 h3 product-price"
+                content="${this.subtotals.products.amount}"
+                >${this.subtotals.products.value}</span
+              >
+            </div>
+            <div class="row col-12">
+              <div class="col col-6 h3 fw-bold">
+                ${this.subtotals.shipping.label}
+              </div>
+              <div
+                class="col col-6 h3 product-price"
+                content="${this.subtotals.shipping.amount}"
+              >
+                ${this.subtotals.shipping.value}
+              </div>
+            </div>
+            <div class="row col-12">
+              <div class="col col-6 h3 fw-bold">${this.total.label}</div>
+              <div
+                class="col col-6 h3 product-price"
+                content="${this.total.amount}"
+              >
+                ${this.total.value}
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="shopping-cart-buttons text-center text-uppercase">
           <a
             href="javascript:void(0)"
-            class="shopping-cart-confirm-btn btn btn-primary btn-block btn-lg mb-2"
+            id="shopping-cart-confirm-btn"
+            class="btn btn-primary w-100 btn-lg mb-2"
           >
             Realizar compra</a
           >
           <a
             href="javascript:void(0)"
-            class="shopping-cart-restore-btn btn btn-secondary btn-block btn-lg"
+            id="shopping-cart-restore-btn"
+            class="btn btn-secondary w-100 btn-lg"
           >
             Restaurar productos</a
           >
