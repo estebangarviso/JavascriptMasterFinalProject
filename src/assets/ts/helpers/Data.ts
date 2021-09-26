@@ -82,7 +82,7 @@ export default class Data {
       return customer.email === email
     })[0]
 
-    if (!response) throw new Error(`Customer email equal to ${email} not found`)
+    // if (!response) throw new Error(`Customer email equal to ${email} not found`)
     return response
   }
 

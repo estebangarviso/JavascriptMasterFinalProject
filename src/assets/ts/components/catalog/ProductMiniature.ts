@@ -87,6 +87,9 @@ export default class ProductMiniature
                 <strong>SKU</strong>: ${this.sku}
               </div>
               <div class="product-price-and-shipping">
+                <p class="product-stock text-muted">
+                  ${this.stock ? `${this.stock} unidades en stock` : ''}
+                </p>
                 <span class="product-price" content="${this.price}"></span>
               </div>
               <div class="product-add-cart">

@@ -8,7 +8,7 @@ export default class FormField extends Component {
   private _label: string = ''
   private _type: string = 'text'
   private _required: boolean = false
-  private _value: number | string | null = null
+  private _value: string | null = null
   private _maxLength: number | null = null
   private _errors: string[] = []
   private _restrictions: RestrictionType[] = []
@@ -43,10 +43,12 @@ export default class FormField extends Component {
     this._type = name
   }
 
-  public get value(): number | string | null {
-    let input = this.component.querySelector('input')
-    if (input) return input.value
-    return null
+  public get value(): string {
+    return this._value
+  }
+
+  public set value(value: string) {
+    this._value = value + ''
   }
 
   public get required(): boolean {
@@ -71,6 +73,7 @@ export default class FormField extends Component {
   }
   public addError(error: string) {
     this._errors.push(error)
+    this.refreshErrors()
   }
 
   public get restrictions(): RestrictionType[] {
@@ -87,21 +90,23 @@ export default class FormField extends Component {
     this.render()
   }
 
-  public refresh() {
-    this.render()
+  public refreshErrors() {
+    document
+      .getElementById(this.name)
+      .closest('.form-group')
+      .querySelector('.help-block').innerHTML = this.renderError
   }
 
-  public render(): void {
-    this.component.innerHTML = `${this.renderField}`
-  }
-
-  private get renderField(): string {
+  public render(): string {
     return /* HTML */ `<label>${this.label}</label
       ><input
+        class="form-control form-control-sm"
         name="${this.name}"
         id="${this.name}"
         type="${this.type}"
         placeholder="${this.label}"
+        ${this.required ? ' required="required" ' : ''}
+        aria-invalid="false"
       />
       <p class="help-block text-danger">${this.renderError}</p>`
   }

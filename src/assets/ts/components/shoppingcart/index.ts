@@ -41,9 +41,9 @@ export default class Shoppingcart extends Component {
     return this._total
   }
 
-  constructor(data: { instance: Data; currency: Currency; carrier: Carrier }) {
+  constructor(data: { data: Data; currency: Currency; carrier: Carrier }) {
     super()
-    this.data = data.instance
+    this.data = data.data
     this.currency = data.currency
     this.carrier = data.carrier
   }
@@ -76,10 +76,10 @@ export default class Shoppingcart extends Component {
     }
   }
 
-  private async setSubtotals() {
+  private setSubtotals() {
     let products, shipping
     if (this.products && this.products.length > 0) {
-      let carrier = await this.carrier
+      let carrier = this.carrier
       products = (() => {
         let amount = this.products.reduce(
             (accumulator, product) =>
@@ -162,12 +162,13 @@ export default class Shoppingcart extends Component {
 
   public init() {
     this.build()
-    this.component = document.getElementById('js-shopping-cart')
     this.render()
   }
 
   public render() {
-    this.component.innerHTML = `${this.renderProducts}${this.renderEmpty}`
+    document.getElementById(
+      'js-shopping-cart'
+    ).innerHTML = `${this.renderProducts}${this.renderEmpty}`
   }
 
   private get hasProducts(): boolean {

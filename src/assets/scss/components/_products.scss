@@ -1,6 +1,6 @@
-#products {
+#js-products {
   transition: opacity 0.3s ease;
-
+  padding: 2rem 0;
   #infinity-loader-icon {
     display: none;
     padding: 3rem 2rem;
@@ -77,6 +77,7 @@
     }
   }
   .product-add-cart {
+    margin-top: auto;
     .input-group-add-cart {
       -ms-flex-wrap: nowrap;
       flex-wrap: nowrap;

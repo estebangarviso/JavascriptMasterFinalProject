@@ -16,35 +16,36 @@ export default abstract class AbstractForm
     this.format.forEach((field) => {
       this._errors.push({ name: field.name, error: field.errors })
     })
-
     return this._errors
   }
 
   public hasErrors() {
+    let hasErrors = false
     this.errors.forEach((field) => {
       if (field.error.length) {
-        return true
+        hasErrors = true
       }
     })
 
-    return false
+    return hasErrors
   }
 
-  public validate(): boolean {
+  public validate(form: HTMLFormElement): boolean {
     for (let field of this.format) {
       field.errors = []
       if (field.required && !field.value) {
         field.addError(ValidateRestriction.message('required'))
-
+        return false
         continue
       } else if (!field.required && !field.value) {
         continue
       }
 
       for (let restriction of field.restrictions) {
-        if(typeof restriction !== 'number'){
+        if (typeof restriction !== 'number') {
           if (Validate[restriction](field.value)) {
             field.addError(ValidateRestriction.message(restriction))
+            return false
           }
         }
       }
@@ -53,14 +54,11 @@ export default abstract class AbstractForm
     return !this.hasErrors()
   }
 
-  public submit(event: Event) {
-    event.preventDefault()
-    return this.validate()
+  submit(event: Event): boolean {
+    // submit listen in init() Child class
+    throw new Error('Method not implemented.')
   }
-
-  public init(): void {
-    this.component.addEventListener('submit', this.submit)
-  }
+  public init(): void {}
 
   public abstract render(): void
 }

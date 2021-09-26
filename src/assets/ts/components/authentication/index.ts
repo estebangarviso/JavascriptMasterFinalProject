@@ -5,6 +5,7 @@ import Validate from '@helpers/Validate'
 import { CustomerInterface } from '@interfaces'
 
 export default class AuthenticationForm extends AbstractForm {
+  private _format: FormField[] = []
   private data: Data
   private _isLogged: boolean = false
   public get isLogged(): boolean {
@@ -20,7 +21,7 @@ export default class AuthenticationForm extends AbstractForm {
    * @return {FormField[]}
    */
   public get format(): FormField[] {
-    let format: FormField[] = [],
+    let format = [],
       email = new FormField(),
       password = new FormField()
 
@@ -40,18 +41,35 @@ export default class AuthenticationForm extends AbstractForm {
 
     format.push(password)
 
-    return format
+    return this._format.length ? this._format : format
   }
+
+  private set format(format: FormField[]) {
+    this._format = format
+  }
+
   constructor(data: Data) {
     super()
     this.data = data
   }
 
   init() {
-    this.component = document.getElementById('authentication')
     this.customerPersist()
     this.render()
-    this.floatingLabels()
+    this.refresh()
+  }
+
+  private refresh() {
+    const form = document.getElementById('authentication-form')
+    if (form) {
+      this.floatingLabels()
+      form.addEventListener('submit', (event: Event) => {
+        event.preventDefault()
+        const target = event.target as HTMLFormElement
+        const isValid = this.validate(target)
+        console.log({ isValid })
+      })
+    }
   }
   /**
    * TODO Session Check Method
@@ -67,7 +85,7 @@ export default class AuthenticationForm extends AbstractForm {
       localStorage.setItem('isLogged', JSON.stringify(false))
       isLogged = localStorage.getItem('isLogged')
       if (isLogged) {
-        this.isLogged = JSON.parse(isLogged)
+        this.isLogged = !!JSON.parse(isLogged)
       } else {
         this.isLogged = false
       }
@@ -81,13 +99,31 @@ export default class AuthenticationForm extends AbstractForm {
 
     const result = this.data.getCustomerByEmail(email)
 
-    return !!result.id_customer
+    return result && !!result.id_customer
   }
 
-  public validate() {
+  private addValues(form: HTMLFormElement) {
+    let newFormat: FormField[] = []
+    this.format.forEach((field) => {
+      const input = form.querySelector(
+        `[name=${field.name}]`
+      ) as HTMLInputElement
+      field.value = input.value
+      newFormat.push(field)
+    })
+    this.format = []
+    this.format = newFormat
+  }
+  public validate(form: HTMLFormElement) {
+    // Add values to format
+    this.addValues(form)
+    // Proceed with validations
     const customerEmail = this.getValue('email')
-
-    return super.validate()
+    if (!this.customerExists(customerEmail)) {
+      this.getField('email').addError('No esta registrado')
+    }
+    
+    return super.validate(form)
   }
 
   public logOut() {
@@ -98,7 +134,12 @@ export default class AuthenticationForm extends AbstractForm {
   }
 
   public render() {
-    this.component.innerHTML = `${this.renderAuthentication}${this.renderWelcome}`
+    document.getElementById(
+      'js-authentication'
+    ).innerHTML = `${this.renderAuthentication}${this.renderWelcome}`
+    this.addValues(
+      document.getElementById('authentication-form') as HTMLFormElement
+    )
   }
 
   private get renderWelcome() {
@@ -115,49 +156,28 @@ export default class AuthenticationForm extends AbstractForm {
     return /* HTML */ `
       <h2 class="text-center">Iniciar Sesión</h2>
       <form id="authentication-form" novalidate>
-        <div class="form-row">
-          <div class="col-md-6 form-group floating-label-form-group mb-0 pb-2">
-            <input
-              class="form-control px-3 rounded"
-              id="email"
-              name="email"
-              type="email"
-              placeholder="Correo"
-              required="required"
-              aria-invalid="false"
-            />
-            <div class="p help-block text-danger"></div>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="col-md-6 form-group floating-label-form-group mb-0 pb-2">
-            <input
-              class="form-control px-3 rounded"
-              id="password"
-              name="password"
-              type="password"
-              placeholder="Contraseña"
-              required="required"
-              aria-invalid="false"
-            />
-            <div class="p help-block text-danger"></div>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <button
-              class="btn btn-primary btn-block"
-              id="submitAuthentication"
-              name="submitAuthentication"
-              type="submit"
-            >
-              Ingresar
-            </button>
-          </div>
+        ${this.format
+          .map(
+            (field) => `<div class="control-group">
+            <div class="col-md-12 form-group floating-label-form-group mb-0 pb-2">${field.render()}</div>
+            </div>`
+          )
+          .join('')}
+
+        <br />
+        <div class="form-group">
+          <button
+            class="btn btn-primary w-100"
+            id="submitAuthentication"
+            name="submitAuthentication"
+            type="submit"
+          >
+            Ingresar
+          </button>
         </div>
       </form>
-      <div id="dev-info">
-        <h3 class="text-center">DATOS DE DESARROLLO</h3>
+      <div id="dev-info" class="py-2">
+        <h6 class="text-center">DATOS DE DESARROLLO</h6>
         <p>
           <span class="label label-info">Usuario: demo@demo.com</span><br />
           <span class="label label-info">Contraseña: demodemo</span>
@@ -168,6 +188,7 @@ export default class AuthenticationForm extends AbstractForm {
 
   public getField(fieldName: string) {
     let field = this.format.filter((field) => field.name === fieldName)[0]
+
     if (field) return field
     else return null
   }
@@ -182,27 +203,28 @@ export default class AuthenticationForm extends AbstractForm {
   }
 
   private floatingLabels() {
-    const withValue = function (event: Event) {
-      let target = event.target as HTMLInputElement
-
-      target.classList.toggle(
-        'floating-label-form-group-with-value',
-        !!target.value
-      )
-    }
-
     const labels = document.querySelectorAll('.floating-label-form-group')
     if (labels.length) {
       for (let label of Array.from(labels)) {
-        label.addEventListener('input', withValue)
-        label.addEventListener('change', withValue)
-        label.addEventListener('focus', function (event: Event) {
+        label.addEventListener('input', function (event: Event) {
           let target = event.target as HTMLInputElement
-          target.classList.add('floating-label-form-group-with-focus')
+          label.classList.toggle(
+            'floating-label-form-group-with-value',
+            !!target.value
+          )
+        })
+        label.addEventListener('change', function (event: Event) {
+          let target = event.target as HTMLInputElement
+          label.classList.toggle(
+            'floating-label-form-group-with-value',
+            !!target.value
+          )
+        })
+        label.addEventListener('focus', function (event: Event) {
+          label.classList.add('floating-label-form-group-with-focus')
         })
         label.addEventListener('blur', function (event: Event) {
-          let target = event.target as HTMLInputElement
-          target.classList.remove('floating-label-form-group-with-focus')
+          label.classList.remove('floating-label-form-group-with-focus')
         })
       }
     }
