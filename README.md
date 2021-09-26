@@ -26,6 +26,19 @@ git clone --branch <version> https://github.com/estebangarviso/JavascriptMasterF
 npm install
 ```
 
+### Package Scripts 🛠️
+
+- Development Environment and Watch Files with sourceMap
+- Run Server in Development Environment and Watch Files with sourceMap
+- Production Environment without sourceMap
+
+```sh
+npm run dev
+npm run server
+npm run build
+
+```
+
 - Then for production type `npm start` or `npm run start:debug` for development and press enter.
 - Visit [http://localhost:3000](http://localhost:3000).
 - Modify PUBLIC_URL in .env file as you wish.
