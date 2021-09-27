@@ -40,7 +40,7 @@ npm run build
 ```
 
 - Then for production port 80 and for development port 3000 and press enter.
-- Visit base url [http://localhost:<port>](http://localhost:<port>).
+- Visit base url [http://localhost:port](http://localhost:port).
 - Modify base url in src/app/config.defaults.json file as you wish.
 
 ### Status 📖
