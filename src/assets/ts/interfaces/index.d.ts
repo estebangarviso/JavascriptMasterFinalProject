@@ -66,8 +66,11 @@ export interface ProductInterface {
   sku: string
   brand: string
   name: string
-  price: number
-  discount_amount?: number | null
+  price_amount: number
+  discount_amount?: number
+  price: string
+  regular_price?: string
+  has_discount: boolean
   img: string
   stock: number
 }
@@ -84,6 +87,7 @@ export interface CurrencyInterface {
   position: string
   decimals: number
   value: number
+  format(amount: number): string
 }
 /**
  * Customer

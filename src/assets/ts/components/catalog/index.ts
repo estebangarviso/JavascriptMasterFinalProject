@@ -1,13 +1,19 @@
 import Component from '@helpers/Component'
 import ProductMiniature from '@components/catalog/ProductMiniature'
-import { ProductInterface } from '@interfaces'
+import { CurrencyInterface, ProductInterface } from '@interfaces'
 
 export default class Catalog extends Component {
   public products: ProductMiniature[]
-
-  constructor(products: ProductInterface[]) {
+  private currency: CurrencyInterface
+  constructor(params: {
+    products: ProductInterface[]
+    currency: CurrencyInterface
+  }) {
     super()
-    this.products = products.map((product) => new ProductMiniature(product))
+    this.currency = params.currency
+    this.products = params.products.map(
+      (product) => new ProductMiniature(product, this.currency)
+    )
   }
   public init() {
     this.render()

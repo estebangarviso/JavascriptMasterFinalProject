@@ -3,7 +3,7 @@
 
 <head>
     {{{block 'head'}}}
-        {{include file='src/templates/partials/head.tpl'}}
+        {{include file='src/templates/_partials/head.tpl'}}
     {{{/block}}}
 </head>
 
@@ -11,8 +11,12 @@
     <main id="main-page-content">
         <section id="wrapper">
             <div id="inner-wrapper" class="container">
-                {{include file='src/templates/partials/notifications.tpl'}}
-
+                {{include file='src/templates/_partials/notifications.tpl'}}
+                <header id="header" class="desktop-header">
+                    {{{block 'header'}}}
+                        {{include file='src/templates/_partials/header.tpl'}}
+                    {{{/block}}}
+                </header>
                 <div class="row">
                     {{{block 'content_wrapper'}}}
                         <div id="content-wrapper" class="col-12 col-md-8">
@@ -24,7 +28,6 @@
                     {{{block 'right_column'}}}
                         <div id="right-column" class="col-12 col-md-4">
                             {{{block name='right_column_content'}}}
-                                {{include file='src/templates/partials/currency-selector.tpl'}}
                                 {{include file='src/templates/authentication.tpl'}}
                                 {{include file='src/templates/shoppingcart.tpl'}}
                             {{{/block}}}

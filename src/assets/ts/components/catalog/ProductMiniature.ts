@@ -1,28 +1,48 @@
 import Component from '@helpers/Component'
-import { ProductInterface } from '@interfaces'
+import { CurrencyInterface, ProductInterface } from '@interfaces'
 
 export default class ProductMiniature
   extends Component
   implements ProductInterface
 {
-  id_product: number
-  sku: string
-  brand: string
-  name: string
-  price: number
-  discount_amount?: number
-  img: string
-  stock: number
-  availability: string
-  availability_message: string
-  constructor(product: ProductInterface) {
+  public id_product: number
+  public sku: string
+  public brand: string
+  public name: string
+  public price_amount: number
+  public discount_amount?: number
+  public has_discount: boolean
+  public img: string
+  public stock: number
+  public price: string
+  public regular_price?: string
+  public availability: string
+  public availability_message: string
+  private currency: CurrencyInterface
+  constructor(product: ProductInterface, currency: CurrencyInterface) {
     super()
+    this.currency = currency
     this.id_product = product.id_product
     this.sku = product.sku
     this.brand = product.brand
     this.name = product.name
-    this.price = product.price
+    this.price_amount = product.price_amount
     this.discount_amount = product.discount_amount
+    if (
+      typeof product.discount_amount !== undefined &&
+      product.discount_amount > 0 &&
+      product.discount_amount < product.price_amount
+    ) {
+      this.has_discount = true
+      this.discount_amount = product.discount_amount
+      this.regular_price = (() => {
+        return this.currency.format(product.price_amount)
+      })()
+      this.price_amount = product.price_amount - product.discount_amount
+    }
+    this.price = (() => {
+      return this.currency.format(this.price_amount)
+    })()
     this.img = product.img
     this.stock = product.stock
     if (this.stock <= 0) {
@@ -90,7 +110,16 @@ export default class ProductMiniature
                 <p class="product-stock text-muted">
                   ${this.stock ? `${this.stock} unidades en stock` : ''}
                 </p>
-                <span class="product-price" content="${this.price}"></span>
+                <span
+                  class="product-price"
+                  data-price
+                  content="${this.price_amount}"
+                  >${this.price}</span
+                >${this.has_discount
+                  ? `<span class="regular-price text-muted" data-price content="${
+                      this.price_amount + this.discount_amount
+                    }">${this.regular_price}</span>`
+                  : ``}
               </div>
               <div class="product-add-cart">
                 <div class="input-group-add-cart">
@@ -123,7 +152,7 @@ export default class ProductMiniature
           <meta itemprop="image" content="${this.img}" />
           <meta itemprop="name" content="${this.name}" />
           <span itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-            <meta itemprop="price" content="${this.price}" />
+            <meta itemprop="price" content="${this.price_amount}" />
           </span>
         </span>
       </article>

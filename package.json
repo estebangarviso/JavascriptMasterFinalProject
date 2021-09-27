@@ -40,6 +40,9 @@
     "url": "https://github.com/estebangarviso/JavascriptMasterFinalProject/issues"
   },
   "homepage": "https://github.com/estebangarviso/JavascriptMasterFinalProject#readme",
+  "browserslist": [
+    "defaults"
+  ],
   "devDependencies": {
     "@babel/cli": "^7.14.8",
     "@babel/core": "^7.15.0",

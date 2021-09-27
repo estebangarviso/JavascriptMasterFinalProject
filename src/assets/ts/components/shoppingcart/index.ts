@@ -2,7 +2,7 @@ import Component from '@helpers/Component'
 import ShoppingcartProduct from './ShoppingcartProduct'
 import { CartSubtotalsType, CartTotalType } from '@types'
 import Data from '@helpers/Data'
-import Currency from '@components/common/currency'
+import Currency from '@components/modules/currency'
 import Carrier from '@components/common/carrier'
 import { ProductInterface } from '@interfaces'
 
@@ -18,12 +18,12 @@ export default class Shoppingcart extends Component {
   public get products() {
     return this._products
   }
-  private _products_quantity: number = 0
-  private set products_quantity(quantity: number) {
-    this._products_quantity = quantity
+  private _products_count: number = 0
+  private set products_count(quantity: number) {
+    this._products_count = quantity
   }
-  public get products_quantity(): number {
-    return this._products_quantity
+  public get products_count(): number {
+    return this._products_count
   }
 
   private _subtotals?: CartSubtotalsType
@@ -101,7 +101,7 @@ export default class Shoppingcart extends Component {
 
   private setQuantities() {
     if (this.products && this.products.length > 0) {
-      this.products_quantity = this.products.reduce(
+      this.products_count = this.products.reduce(
         (accumulator, product) => product.cart_quantity + accumulator,
         0
       )
@@ -113,7 +113,8 @@ export default class Shoppingcart extends Component {
     if (this.products && this.products.length > 0) {
       let carrier = this.carrier
       products = (() => {
-        let amount = this.products.reduce(
+        let type = 'products',
+          amount = this.products.reduce(
             (accumulator, product) =>
               product.price_amount !== undefined
                 ? product.price_amount * product.cart_quantity + accumulator
@@ -122,26 +123,29 @@ export default class Shoppingcart extends Component {
           ),
           label = 'Productos',
           value = this.currency.format(amount)
-        return { amount, label, value }
+        return { type, amount, label, value }
       })()
       shipping = (() => {
-        let amount =
+        let type = 'shipping',
+          amount =
             carrier.fixed_price +
             this.products.reduce((accumulator, product) => {
               return product.cart_quantity * carrier.per_package + accumulator
             }, 0),
           label = 'Envío',
           value = this.currency.format(amount)
-        return { amount: amount, label: label, value: value }
+        return { type, amount: amount, label: label, value: value }
       })()
-      this.subtotals = { products, shipping }
+      this.subtotals = [products, shipping]
 
-      if (this.subtotals.products && this.subtotals.shipping) {
-        let amount =
-            this.subtotals.products.amount + this.subtotals.shipping.amount,
+      if (this.subtotals.length) {
+        let type = 'total',
+          amount = this.subtotals
+            .map((subtotal) => +subtotal.amount)
+            .reduce((amount, accumulator) => amount + accumulator, 0),
           label = 'Total',
           value = this.currency.format(amount)
-        this.total = { amount, label, value }
+        this.total = { type, amount, label, value }
       }
     }
   }
@@ -232,6 +236,30 @@ export default class Shoppingcart extends Component {
     ).innerHTML = `${this.renderProducts}${this.renderEmpty}`
   }
 
+  public renderCart(){
+    return /* HTML */ ` <div id="blockcart" class="blockcart cart-preview">
+   <a id="cart-toogle" class="cart-toogle header-btn header-cart-btn" data-toggle="dropdown" data-display="static">
+       <i class="fas fa-shopping-cart fa-fw icon" aria-hidden="true"><span class="cart-products-count-btn ${this.products_count < 1 ? `d-none` : ``}">${this.products_count}</span></i>
+       <span class="info-wrapper">
+       <span class="title">Carro de Compras</span>
+       <span class="cart-toggle-details">
+       <span class="text-faded cart-separator"> / </span>
+       {if this.products_count > 0}
+       <span class="cart-products-count">(${this.products_count})</span>
+       {foreach from=this.subtotals item="subtotal"}
+           {if $subtotal.type == 'products'}
+                   <span class="value">{$subtotal.value}</span>
+           {/if}
+       {/foreach}
+       {else}
+        No hay productos en su carro
+       {/if}
+       </span>
+       </span>
+   </a>
+   {include 'module:ps_shoppingcart/ps_shoppingcart-content.tpl' class='dropdown'}
+</div>`
+  }
   private get hasProducts(): boolean {
     let isValid = true
     if (this.products.length === 0) isValid = false
@@ -245,40 +273,7 @@ export default class Shoppingcart extends Component {
             .map((product) => `<li>${product.render()}</li>`)
             .join('')}
         </ul>
-        <div class="row">
-          <div class="col col-12">
-            <div class="row col-12">
-              <div class="col col-6 h3 fw-bold">
-                ${this.subtotals.products.label}
-              </div>
-              <span
-                class="col col-6 h3 product-price"
-                content="${this.subtotals.products.amount}"
-                >${this.subtotals.products.value}</span
-              >
-            </div>
-            <div class="row col-12">
-              <div class="col col-6 h3 fw-bold">
-                ${this.subtotals.shipping.label}
-              </div>
-              <div
-                class="col col-6 h3 product-price"
-                content="${this.subtotals.shipping.amount}"
-              >
-                ${this.subtotals.shipping.value}
-              </div>
-            </div>
-            <div class="row col-12">
-              <div class="col col-6 h3 fw-bold">${this.total.label}</div>
-              <div
-                class="col col-6 h3 product-price"
-                content="${this.total.amount}"
-              >
-                ${this.total.value}
-              </div>
-            </div>
-          </div>
-        </div>
+        ${this.renderSummarySubtotals}${this.renderSummaryTotals}
         <div class="shopping-cart-buttons text-center text-uppercase">
           <a
             href="javascript:void(0)"
@@ -296,6 +291,31 @@ export default class Shoppingcart extends Component {
           >
         </div>`
     } else return ''
+  }
+
+  private get renderSummarySubtotals() {
+    return /* HTML */ `<div class="card-block cart-summary-subtotals-container">
+      ${this.subtotals
+        .map(
+          (subtotal) => /* HTML */ `<div
+            class="cart-summary-line cart-summary-subtotals"
+            id="cart-subtotal-{$subtotal.type}"
+          >
+            <span class="label">${subtotal.label}</span>
+            <span class="value">${subtotal.value}</span>
+          </div>`
+        )
+        .join('')}
+    </div>`
+  }
+
+  private get renderSummaryTotals() {
+    return /* HTML */ `<div class="card-body cart-summary-totals">
+      <div class="cart-summary-line cart-total">
+        <span class="label">${this.total.label}</span>
+        <span class="value">${this.total.value}</span>
+      </div>
+    </div>`
   }
 
   private get renderEmpty() {

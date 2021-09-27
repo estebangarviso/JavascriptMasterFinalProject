@@ -1,4 +1,4 @@
-import Currency from '@components/common/currency'
+import Currency from '@components/modules/currency'
 import Component from '@helpers/Component'
 import Data from '@helpers/Data'
 import { ProductInterface, ShoppingcartProductInterface } from '@interfaces'
@@ -10,15 +10,18 @@ export default class ShoppingcartProduct
   public init(): void {
     throw new Error('Method not implemented.')
   }
-  public id_product?: number
-  public name?: string
-  public sku?: string
-  public brand?: string
-  public img?: string
-  public price_amount?: number
-  public price?: string
-  public total?: string
-  public cart_quantity: number = 0
+  public id_product: number
+  public name: string
+  public sku: string
+  public brand: string
+  public img: string
+  public price_amount: number
+  public discount_amount?: number
+  public has_discount: boolean = false
+  public price: string
+  public regular_price?: string
+  public total: string
+  public cart_quantity: number
   private currency: Currency
 
   constructor(
@@ -34,7 +37,19 @@ export default class ShoppingcartProduct
     this.brand = product.brand
     this.img = product.img
     this.cart_quantity = cart_quantity
-    this.price_amount = product.price
+    this.price_amount = product.price_amount
+    if (
+      typeof product.discount_amount !== undefined &&
+      product.discount_amount > 0 &&
+      product.discount_amount < product.price_amount
+    ) {
+      this.has_discount = true
+      this.discount_amount = product.discount_amount
+      this.regular_price = (() => {
+        return this.currency.format(this.price_amount)
+      })()
+      this.price_amount = product.price_amount - product.discount_amount
+    }
     this.price = (() => {
       return this.currency.format(this.price_amount)
     })()
@@ -96,9 +111,16 @@ export default class ShoppingcartProduct
           </div>
           <div class="col">
             <span class="text-muted">x</span>
-            <span class="product-price" content="${this.price_amount}"
+            <span
+              class="product-price"
+              data-price
+              content="${this.price_amount}"
               >${this.price}</span
-            >
+            >${this.has_discount
+              ? `<br /><span class="regular-price text-muted" data-price content="${
+                  this.price_amount + this.discount_amount
+                }">${this.regular_price}</span>`
+              : ``}
           </div>
 
           <div class="col col-auto">

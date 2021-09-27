@@ -121,10 +121,6 @@ let config = (devMode = true) => {
         patterns: [
           { from: 'json', to: 'json' },
           { from: 'assets/img', to: 'img' },
-          // {
-          //   from: 'assets/fonts/fontawesome-pro/webfonts',
-          //   to: 'fonts/fontawesome-pro/webfonts',
-          // },
         ],
         options: {
           concurrency: 100,

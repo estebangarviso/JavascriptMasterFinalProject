@@ -39,9 +39,9 @@ npm run build
 
 ```
 
-- Then for production type `npm start` or `npm run start:debug` for development and press enter.
-- Visit [http://localhost:3000](http://localhost:3000).
-- Modify PUBLIC_URL in .env file as you wish.
+- Then for production port 80 and for development port 3000 and press enter.
+- Visit base url [http://localhost:<port>](http://localhost:<port>).
+- Modify base url in src/app/config.defaults.json file as you wish.
 
 ### Status 📖
 

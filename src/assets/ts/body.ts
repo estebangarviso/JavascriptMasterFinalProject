@@ -3,7 +3,7 @@ import Shoppingcart from '@components/shoppingcart'
 import AuthenticationForm from '@components/authentication'
 // import Notifications from '@components/common/notifications'
 import Catalog from '@components/catalog'
-import Currency from '@components/common/currency'
+import Currency from '@components/modules/currency'
 import Data from '@helpers/Data'
 import { fadeOut } from '@components/common/preloader'
 import Touchspin from '@components/common/touchspin'
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   // Declaring components
   const currency = new Currency(data)
   const carrier = new Carrier(data.getCarrier()) /* There's just one carrier */
-  const catalog = new Catalog(data.products)
+  const catalog = new Catalog({ products: data.products, currency })
   const cart = new Shoppingcart({ data, currency, carrier })
   const authentication = new AuthenticationForm(data)
 

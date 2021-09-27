@@ -1,7 +1,9 @@
 const config = require('./config.defaults.json')
+const currencies = require('../json/currencies.json')
 const defaultParameters = {
   iso_code: config.iso_code,
   lang: config.lang,
+  currencies: currencies,
   app: {
     name: config.site_name,
     logo: 'assets/img/logo.png',
@@ -9,6 +11,7 @@ const defaultParameters = {
       default_typo: 'Lato',
       highlight_typo: 'Poppins',
     },
+    header_text: 'Envío a todo el mundo ✈️',
   },
   page: {
     page_name: 'spa',

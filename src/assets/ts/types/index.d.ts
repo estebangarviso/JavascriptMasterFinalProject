@@ -8,16 +8,16 @@ import {
 } from '@interfaces'
 
 /** @type {CartTotalType} - Total type in cart */
-export type CartTotalType =
-  | { amount: number; label: string; value: string }
-  | undefined
+export type CartTotalType = {
+  type: string
+  amount: number
+  label: string
+  value: string
+}
+
 /** @type {CartSubtotalsType} - Subtotal types in cart */
-export type CartSubtotalsType =
-  | {
-      products: CartTotalType
-      shipping: CartTotalType
-    }
-  | undefined
+export type CartSubtotalsType = CartTotalType[]
+
 /** @type {RestrictionType} - Validate restriction type */
 export type RestrictionType = Exclude<keyof typeof Validate, 'prototype'>
 /** @type {AsyncFetchType} - Async fetch type */

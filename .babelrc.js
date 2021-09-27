@@ -1,7 +1,10 @@
 module.exports = (api) => {
   api.cache(true)
 
-  const presets = ['@babel/typescript', ['@babel/env', { modules: false }]]
+  const presets = [
+    '@babel/preset-typescript',
+    ['@babel/preset-env', { corejs: 3, useBuiltIns: 'usage', debug: true }],
+  ]
   const plugins = [
     [
       '@babel/plugin-transform-runtime',
