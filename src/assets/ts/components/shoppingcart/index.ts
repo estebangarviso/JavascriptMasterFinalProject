@@ -236,29 +236,38 @@ export default class Shoppingcart extends Component {
     ).innerHTML = `${this.renderProducts}${this.renderEmpty}`
   }
 
-  public renderCart(){
+  public renderCart() {
     return /* HTML */ ` <div id="blockcart" class="blockcart cart-preview">
-   <a id="cart-toogle" class="cart-toogle header-btn header-cart-btn" data-toggle="dropdown" data-display="static">
-       <i class="fas fa-shopping-cart fa-fw icon" aria-hidden="true"><span class="cart-products-count-btn ${this.products_count < 1 ? `d-none` : ``}">${this.products_count}</span></i>
-       <span class="info-wrapper">
-       <span class="title">Carro de Compras</span>
-       <span class="cart-toggle-details">
-       <span class="text-faded cart-separator"> / </span>
-       {if this.products_count > 0}
-       <span class="cart-products-count">(${this.products_count})</span>
-       {foreach from=this.subtotals item="subtotal"}
-           {if $subtotal.type == 'products'}
-                   <span class="value">{$subtotal.value}</span>
-           {/if}
-       {/foreach}
-       {else}
-        No hay productos en su carro
-       {/if}
-       </span>
-       </span>
-   </a>
-   {include 'module:ps_shoppingcart/ps_shoppingcart-content.tpl' class='dropdown'}
-</div>`
+      <a
+        id="cart-toogle"
+        class="cart-toogle header-btn header-cart-btn"
+        data-toggle="dropdown"
+        data-display="static"
+      >
+        <i class="fas fa-shopping-cart fa-fw icon" aria-hidden="true"
+          ><span
+            class="cart-products-count-btn ${this.products_count < 1
+              ? `d-none`
+              : ``}"
+            >${this.products_count}</span
+          ></i
+        >
+        <span class="info-wrapper">
+          <span class="title">Carro de Compras</span>
+          <span class="cart-toggle-details">
+            <span class="text-faded cart-separator"> / </span>
+            {if this.products_count > 0}
+            <span class="cart-products-count">(${this.products_count})</span>
+            {foreach from=this.subtotals item="subtotal"} {if $subtotal.type ==
+            'products'}
+            <span class="value">{$subtotal.value}</span>
+            {/if} {/foreach} {else} No hay productos en su carro {/if}
+          </span>
+        </span>
+      </a>
+      {include 'module:ps_shoppingcart/ps_shoppingcart-content.tpl'
+      class='dropdown'}
+    </div>`
   }
   private get hasProducts(): boolean {
     let isValid = true
@@ -302,7 +311,9 @@ export default class Shoppingcart extends Component {
             id="cart-subtotal-{$subtotal.type}"
           >
             <span class="label">${subtotal.label}</span>
-            <span class="value">${subtotal.value}</span>
+            <span class="value" data-price content="${subtotal.amount}"
+              >${subtotal.value}</span
+            >
           </div>`
         )
         .join('')}
@@ -313,7 +324,9 @@ export default class Shoppingcart extends Component {
     return /* HTML */ `<div class="card-body cart-summary-totals">
       <div class="cart-summary-line cart-total">
         <span class="label">${this.total.label}</span>
-        <span class="value">${this.total.value}</span>
+        <span class="value" data-price content="${this.total.amount}"
+          >${this.total.value}</span
+        >
       </div>
     </div>`
   }
