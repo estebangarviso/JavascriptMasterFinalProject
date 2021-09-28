@@ -1,13 +1,14 @@
 import { products, currencies, carriers, customers } from '@helpers/Promises'
 import Shoppingcart from '@components/shoppingcart'
 import AuthenticationForm from '@components/authentication'
-// import Notifications from '@components/common/notifications'
+import Notifications from '@components/common/notifications'
 import Catalog from '@components/catalog'
 import Currency from '@components/modules/currency'
 import Data from '@helpers/Data'
 import { fadeOut } from '@components/common/preloader'
 import Touchspin from '@components/common/touchspin'
 import Carrier from '@components/common/carrier'
+import { Responsive } from '@components/common/responsive'
 
 document.addEventListener('DOMContentLoaded', async function () {
   // Declaring components in DOM
@@ -32,11 +33,19 @@ document.addEventListener('DOMContentLoaded', async function () {
   })
 
   // Declaring components
+  const notifications = new Notifications()
   const currency = new Currency(data)
   const carrier = new Carrier(data.getCarrier()) /* There's just one carrier */
   const catalog = new Catalog({ products: data.products, currency })
-  const cart = new Shoppingcart({ data, currency, carrier })
+  const cart = new Shoppingcart({
+    data,
+    currency,
+    carrier,
+    catalog,
+    notifications,
+  })
   const authentication = new AuthenticationForm(data)
+  const responsive = new Responsive()
 
   // Initializing components
   // Catalog
@@ -48,6 +57,12 @@ document.addEventListener('DOMContentLoaded', async function () {
   currency.init()
   // Authentication Form
   authentication.init()
+  // Responsive
+  responsive.init()
+  // Notifications
+  notifications.init()
+  // Add Info Notification
+  notifications.addInfo = '✨Bienvenido!'
 
   // Add Spinner to products input[type=number]
   productMiniatures.forEach(

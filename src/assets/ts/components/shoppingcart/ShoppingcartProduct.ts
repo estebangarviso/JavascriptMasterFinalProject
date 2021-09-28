@@ -77,7 +77,7 @@ export default class ShoppingcartProduct
   public refresh() {}
 
   public render() {
-    return /* HTML */ `<div class="row no-gutters align-items-center">
+    return /* HTML */ `<div class="row g-0s align-items-center">
       <div class="col-3">
         <span class="product-image media-middle">
           <img src="${this.img}" alt="${this.name}" class="img-fluid" />
@@ -98,7 +98,7 @@ export default class ShoppingcartProduct
           </div>
         </div>
 
-        <div class="row align-items-center mt-2 no-gutters">
+        <div class="row align-items-center mt-2 g-0s">
           <div class="col mr-2">
             <input
               class="cart-product-quantity form-control js-cart-line-product-quantity"

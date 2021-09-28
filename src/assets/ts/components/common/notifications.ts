@@ -1,56 +1,73 @@
 import { NotificationInterface } from '@interfaces'
 import Component from '@helpers/Component'
+import { fadeOut } from './preloader'
 
 export default class Notifications
   extends Component
   implements NotificationInterface
 {
-  public error: string = ''
-  public warning: string = ''
-  public success: string = ''
-  public info: string = ''
+  public get component() {
+    return document.getElementById('js-notifications')
+  }
+  private _error: string
+  private _warning: string
+  private _success: string
+  private _info: string
 
-  init() {
-    this.component = document.getElementById('notifications')
-    this.component.addEventListener('showNotifications', this.render)
+  get error() {
+    return this._error
+  }
+  get warning() {
+    return this._warning
+  }
+  get success() {
+    return this._success
+  }
+  get info() {
+    return this._info
+  }
+
+  set addError(notif: string) {
+    this._error = notif
+    this.refresh()
+  }
+  set addWarning(notif: string) {
+    this._warning = notif
+    this.refresh()
+  }
+  set addSuccess(notif: string) {
+    this._success = notif
+    this.refresh()
+  }
+  set addInfo(notif: string) {
+    this._info = notif
+    this.refresh()
+  }
+
+  public init() {
+    this.component.addEventListener('show notification', () => this.render())
   }
 
   public render(): void {
     this.component.innerHTML = `
-        ${this.renderError}
-        ${this.renderWarning}
-        ${this.renderSuccess}
-        ${this.renderInfo}`
+        ${this.renderError}${this.renderWarning}${this.renderSuccess}${this.renderInfo}`
   }
 
-  set addError(notif: string) {
-    this.error = notif
-    this.refresh()
-  }
-  set addWarning(notif: string) {
-    this.warning = notif
-    this.refresh()
-  }
-  set addSuccess(notif: string) {
-    this.success = notif
-    this.refresh()
-  }
-  set addInfo(notif: string) {
-    this.info = notif
-    this.refresh()
-  }
   /**
    * @desc Refresh fucntion to emmit event when add a notification
    */
   private refresh(): void {
-    const event = new CustomEvent('showNotifications')
-    this.component.dispatchEvent(event)
+    const event = new Event('show notification')
+    const element = this.component
+    element.dispatchEvent(event)
+    const alert = element.querySelector('.alert')
+    fadeOut(alert as HTMLElement, 5000, () => alert.remove())
   }
   /**
    * @desc Render if error exist
    * @return {string}
    */
-  private get renderError() {
+  private get renderError(): string {
     if (this.error)
       return /* HTML */ `
         <article class="alert alert-danger" role="alert" data-alert="danger">
@@ -59,10 +76,10 @@ export default class Notifications
           </ul>
         </article>
       `
-    else return ''
+    return ''
   }
   /**
-   * @desc Render if warnig exist
+   * @desc Render if warning exist
    * @return {string}
    */
   private get renderWarning(): string {
@@ -74,7 +91,7 @@ export default class Notifications
           </ul>
         </article>
       `
-    else return ''
+    return ''
   }
   /**
    * @desc Render if success exist
@@ -89,13 +106,15 @@ export default class Notifications
           </ul>
         </article>
       `
-    else return ''
+    return ''
   }
   /**
    * @desc Render if info exist
    * @return {string}
    */
-  private get renderInfo(): string {
+  public get renderInfo(): string {
+    console.log(this._info)
+
     if (this.info)
       return /* HTML */ `
         <article class="alert alert-info" role="alert" data-alert="info">
@@ -104,6 +123,6 @@ export default class Notifications
           </ul>
         </article>
       `
-    else return ''
+    return ''
   }
 }

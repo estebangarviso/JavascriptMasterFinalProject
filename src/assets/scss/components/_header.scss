@@ -1,5 +1,8 @@
 /*** HEADER ***/
 #header {
+  background-color: tint($secondary, 80%);
+  padding-top: 5px;
+  padding-bottom: 5px;
   position: relative;
   z-index: 100;
 
@@ -14,6 +17,7 @@
     > .icon {
       position: relative;
       display: inline-block;
+      font-size: 1.4rem;
     }
     .title {
       display: block;
@@ -23,6 +27,7 @@
   }
 
   .header-custom-html {
+    font-weight: bold;
     p:last-child {
       margin-bottom: 0;
     }
@@ -35,14 +40,17 @@
       position: static;
     }
   }
-
-  //style1
-  .desktop-header {
+  &.desktop-header {
     .col-header-center {
       margin: 0 auto;
     }
     #user_info {
       margin-top: 0.6rem;
+    }
+    #desktop_logo {
+      margin: 0 auto;
+      height: 50px;
+      content: url('../../img/logo.svg');
     }
     .header-custom-html {
       margin-bottom: 0.8rem;
@@ -67,6 +75,13 @@
   }
   .col-mobile-logo {
     padding: 0 rem(10px);
+  }
+  .col-mobile-btn {
+    .m-nav-btn {
+      i {
+        font-size: 1rem;
+      }
+    }
   }
   .col-mobile-btn-search,
   .col-mobile-btn-menu {
@@ -111,6 +126,7 @@
 /*** HEADER STICKY ***/
 #desktop-header {
   &.stuck-header {
+    background-color: rgba($color: tint($primary, 60%), $alpha: 0.65);
     position: fixed;
     top: 0;
     left: 0;

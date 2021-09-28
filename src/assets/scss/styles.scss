@@ -9,8 +9,24 @@
 @import './components/authentication';
 @import './components/products';
 @import './components/shoppingcart';
+@import './components/notifications';
+@import './components/dropdown';
+@import './components/modals';
 @import './components/preloader';
 @import './components/header';
 /*** CUSTOMS ***/
 @import './_partials/responsive';
 @import './_partials/fixes';
+
+/** THEME **/
+#content-wrapper .page-title {
+  color: $secondary;
+  text-align: left;
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 700;
+  text-transform: none;
+  border-bottom: solid 2px $primary;
+  margin-bottom: 0.8em;
+  padding-bottom: 0.5em;
+}

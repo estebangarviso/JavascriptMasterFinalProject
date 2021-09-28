@@ -18,7 +18,7 @@
 
 {{{block 'head_og_tags'}}}
     <meta property="og:title" content="{{$page.meta.title}}" />
-    <meta property="og:url" content="{{$page.url}} " />
+    <meta property="og:url" content="{{$page.url}}" />
     <meta property="og:site_name" content="{{$app.name}}" />
     <meta property="og:description" content="{{$page.meta.description}} ">
     <meta property="og:type" content="website">
@@ -44,7 +44,6 @@
 {{* Modules Head Tags *}}
 {{$headPlugins}}
 {{* Webpack externals *}}
-<script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.5.0/dist/lazyload.min.js"></script>
 
 {{{block 'stylesheets'}}}
     {{$styles}}

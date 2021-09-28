@@ -4,7 +4,8 @@
   max-width: 340px;
   padding: 1rem;
   text-align: left;
-
+  background-color: $primary;
+  color: white;
   .cart-title {
     hr {
       width: 100%;
@@ -15,6 +16,9 @@
   }
 
   .cart-products {
+    list-style: none;
+    margin-bottom: 0;
+    padding-left: 0;
     > li {
       padding-bottom: 0.875rem;
       margin-bottom: 0.875rem;
@@ -25,6 +29,14 @@
     }
     .col-info {
       padding-left: 1rem;
+    }
+    .cart-product-quantity {
+      -moz-appearance: textfield;
+      &::-webkit-inner-spin-button,
+      &::-webkit-outer-spin-button {
+        margin: 0;
+        -webkit-appearance: none;
+      }
     }
   }
   .block-cart-product-quantity-gift {
@@ -51,7 +63,7 @@
 }
 
 /** BLOCK CART TOOGLE **/
-#js-shoppingcart {
+.js-shopping-cart {
   #blockcart {
     position: relative;
     display: inline-block;
@@ -73,6 +85,8 @@
     line-height: 15px;
     text-align: center;
     border-radius: 30px;
+    color: $white;
+    background-color: $red-500;
   }
 
   &.col-mobile-btn-cart {
@@ -112,7 +126,14 @@
         max-height: 380px;
         overflow-x: hidden;
         overflow-y: auto;
-
+        .cart-product-quantity {
+          -moz-appearance: textfield;
+          &::-webkit-inner-spin-button,
+          &::-webkit-outer-spin-button {
+            margin: 0;
+            -webkit-appearance: none;
+          }
+        }
         @media screen and (max-height: 770px) {
           max-height: 245px;
         }
@@ -164,7 +185,16 @@
       flex: 1 1 auto;
       min-height: 0;
       overflow-y: auto;
+      overflow-x: hidden;
       -webkit-box-flex: 1;
+      .cart-product-quantity {
+        -moz-appearance: textfield;
+        &::-webkit-inner-spin-button,
+        &::-webkit-outer-spin-button {
+          margin: 0;
+          -webkit-appearance: none;
+        }
+      }
       &::-webkit-scrollbar-track {
       }
       &::-webkit-scrollbar {
@@ -194,7 +224,7 @@
   .info-wrapper {
     display: none !important;
   }
-  #js-shoppingcart.side-cart #blockcart-content {
+  .js-shopping-cart.side-cart #blockcart-content {
     right: -1rem;
     min-width: 340px;
   }
@@ -223,7 +253,7 @@
   }
 }
 //fix for iphone bottom toollbar
-#mobile-header #js-shoppingcart.side-cart #blockcart-content {
+#mobile-header .js-shopping-cart.side-cart #blockcart-content {
   padding-bottom: 120px;
 }
 
@@ -231,10 +261,10 @@
 }
 
 @media screen and (max-width: 400px) {
-  #js-shoppingcart.dropdown {
+  .js-shopping-cart.dropdown {
     position: static;
   }
-  #js-shoppingcart.dropdown #blockcart-content {
+  .js-shopping-cart.dropdown #blockcart-content {
     right: 2vw;
     left: 2vw;
     min-width: 92vw;

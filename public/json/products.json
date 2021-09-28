@@ -4,7 +4,7 @@
     "sku": "coffesso250g",
     "brand": "Coffesso",
     "name": "Cafe de Granos Coffesso 250G \"Classico\" sabor Caramelo Equilibrado",
-    "price": 49400,
+    "price_amount": 49400,
     "discount_amount": 0,
     "img": "img/products/coffeebeans/coffesso250g.jpg",
     "stock": 1
@@ -14,7 +14,7 @@
     "sku": "egoiste250g",
     "brand": "Egoiste",
     "name": "Cafe de Granos Egoister 250G Tostado de Alta Calidad",
-    "price": 5850,
+    "price_amount": 5850,
     "discount_amount": 0,
     "img": "img/products/coffeebeans/egoiste250g.png",
     "stock": 5
@@ -24,7 +24,7 @@
     "sku": "1cup",
     "brand": "Espresso",
     "name": "Cafetera Moka Espresso 1 Taza Italiana de Aluminio para Cocina con Hornillos",
-    "price": 4800,
+    "price_amount": 4800,
     "discount_amount": 0,
     "img": "img/products/coffeecup/1cup.jpg",
     "stock": 4
@@ -34,7 +34,7 @@
     "sku": "3cup",
     "brand": "Espresso",
     "name": "Cafetera Moka Espresso 3 Taza Italiana de Aluminio para Cocina con Hornillos",
-    "price": 6500,
+    "price_amount": 6500,
     "discount_amount": 0,
     "img": "img/products/coffeecup/3cup.jpg",
     "stock": 3
@@ -44,7 +44,7 @@
     "sku": "6cup",
     "brand": "Espresso",
     "name": "Cafetera Moka Espresso 6 Taza Italiana de Aluminio para Cocina con Hornillos",
-    "price": 8100,
+    "price_amount": 8100,
     "discount_amount": 0,
     "img": "img/products/coffeecup/6cup.jpg",
     "stock": 2
@@ -54,7 +54,7 @@
     "sku": "9cup",
     "brand": "Espresso",
     "name": "Cafetera Moka Espresso 9 Taza Italiana de Aluminio para Cocina con Hornillos",
-    "price": 9800,
+    "price_amount": 9800,
     "img": "img/products/coffeecup/9cup.jpg",
     "stock": 5
   },
@@ -63,7 +63,7 @@
     "sku": "12cup",
     "brand": "Espresso",
     "name": "Cafetera Moka Espresso 12 Taza Italiana de Aluminio para Cocina con Hornillos",
-    "price": 11400,
+    "price_amount": 11400,
     "discount_amount": 0,
     "img": "img/products/coffeecup/12cup.jpg",
     "stock": 5
@@ -73,7 +73,7 @@
     "sku": "machine1",
     "brand": "Espresso",
     "name": "Máquina de Café Expresso Comercial de Doble Cabezal Profesional",
-    "price": 1998000,
+    "price_amount": 1998000,
     "discount_amount": 0,
     "img": "img/products/coffeemachine/machine1.jpg",
     "stock": 1
@@ -83,7 +83,7 @@
     "sku": "machine2",
     "brand": "Espresso",
     "name": "Cafetera Espresso Máquina Inteligente Automática",
-    "price": 585000,
+    "price_amount": 585000,
     "discount_amount": 175500,
     "img": "img/products/coffeemachine/machine2.png",
     "stock": 1

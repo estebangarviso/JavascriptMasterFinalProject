@@ -107,7 +107,7 @@ export default class ProductMiniature
                 <strong>SKU</strong>: ${this.sku}
               </div>
               <div class="product-price-and-shipping">
-                <p class="product-stock text-muted">
+                <p class="product-stock text-muted" data-stock="${this.stock}">
                   ${this.stock ? `${this.stock} unidades en stock` : ''}
                 </p>
                 <span

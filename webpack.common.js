@@ -4,6 +4,7 @@ const MiniCssExtractPluginLoader = require('mini-css-extract-plugin').loader
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const Dotenv = require('dotenv-webpack')
 const miniSVGDataURI = require('mini-svg-data-uri')
 const { templateParameters, favicons } = require('./src/app/config')
 
@@ -113,10 +114,8 @@ let config = (devMode = true) => {
         },
       ],
     },
-    externals: {
-      LazyLoad: 'vanilla-lazyload',
-    },
     plugins: [
+      new Dotenv(),
       new CopyWebpackPlugin({
         patterns: [
           { from: 'json', to: 'json' },

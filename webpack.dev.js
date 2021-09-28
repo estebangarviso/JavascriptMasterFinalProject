@@ -18,7 +18,7 @@ const plugins = [
 // Dev main config
 let config = merge(common, {
   mode: 'development',
-  devtool: 'inline-source-map',
+  devtool: 'eval-source-map',
   watch: true,
   watchOptions: {
     ignored: '**/node_modules',

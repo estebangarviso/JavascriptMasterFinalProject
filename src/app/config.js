@@ -1,5 +1,6 @@
 const config = require('./config.defaults.json')
 const currencies = require('../json/currencies.json')
+require('dotenv').config()
 const defaultParameters = {
   iso_code: config.iso_code,
   lang: config.lang,
@@ -15,7 +16,7 @@ const defaultParameters = {
   },
   page: {
     page_name: 'spa',
-    url: config.base_url,
+    url: process.env.PUBLIC_URL || config.base_url,
     meta: {
       title: 'eCafe | ' + config.title,
       description: config.description,
