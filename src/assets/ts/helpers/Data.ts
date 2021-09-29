@@ -126,6 +126,18 @@ export default class Data {
   }
 
   /**
+   * Get last purchases quantities taken
+   */
+  public static getLastPurchases():
+    | { id_product: number; stock_taken: number }[]
+    | [] {
+    const last_purchases = localStorage.getItem('last_purchases')
+
+    if (last_purchases === null) return []
+    else return JSON.parse(last_purchases)
+  }
+
+  /**
    * Truncate string and add ... at the end if exceed num parameter
    * @param {string} str - string to truncate
    * @param {number} num - number of characters to check

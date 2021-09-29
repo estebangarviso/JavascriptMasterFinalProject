@@ -1,4 +1,5 @@
 import Component from '@helpers/Component'
+import Data from '@helpers/Data'
 import { CurrencyInterface, ProductInterface } from '@interfaces'
 
 export default class ProductMiniature
@@ -45,7 +46,15 @@ export default class ProductMiniature
       return this.currency.format(this.price_amount)
     })()
     this.img = product.img
-    this.stock = product.stock
+    // Check if customer past purchases
+    let stock = product.stock
+    const last_purchases = Data.getLastPurchases()
+    if (last_purchases.length)
+      last_purchases.forEach((last_purchase) => {
+        if (this.id_product === last_purchase.id_product)
+          stock = stock - last_purchase.stock_taken
+      })
+    this.stock = stock
     this.updateStatusMessages()
   }
   public updateStatusMessages() {
@@ -59,6 +68,7 @@ export default class ProductMiniature
       this.availability = 'available'
       this.availability_message = 'Disponible para pedido'
     } else {
+      this.stock = 0
       this.availability = 'unavailable'
       this.availability_message = 'Agotado'
     }

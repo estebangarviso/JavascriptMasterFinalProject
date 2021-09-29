@@ -17,7 +17,7 @@
                         </div>
 
                         <div class="col col-header-right text-end">
-                            <div class="row g-0 justify-content-end">
+                            <div class="row justify-content-end">
                                 {{include file='src/templates/modules/currency-selector.tpl'}}
                                 {{include file='src/templates/shoppingcart.tpl'}}
                             </div>
@@ -37,7 +37,7 @@
             <div id="mobile-header-sticky">
                 <div class="container">
                     <div class="mobile-main-bar">
-                        <div class="row no-gutters align-items-center row-mobile-header">
+                        <div class="row align-items-center row-mobile-header">
                             <div class="col col-auto col-mobile-btn col-mobile-btn-menu col-mobile-menu">
                                 <div class="m-nav-btn" data-toggle="dropdown" data-display="static"><i class="fas fa-bars"
                                         aria-hidden="true"></i>
@@ -51,14 +51,16 @@
                                 </a>
                             </div>
                             <div class="col col-auto col-mobile-btn col-mobile-btn-account">
-                                <div class="m-nav-btn"><i class="fa fa-user" aria-hidden="true"></i>
-                                </div>
+                                <a href="#js-authentication">
+                                    <div class="m-nav-btn"><i class="fas fa-user" aria-hidden="true"></i>
+                                    </div>
+                                </a>
                             </div>
                             <div class="col col-auto col-mobile-btn col-mobile-btn-cart js-shopping-cart side-cart">
                                 <div id="mobile-cart-wrapper">
                                     <div id="mobile-cart-toogle" class="m-nav-btn" data-toggle="dropdown"
                                         data-display="static">
-                                        <i class="fa fa-shopping-cart mobile-cart-icon" aria-hidden="true"><span
+                                        <i class="fas fa-shopping-cart mobile-cart-icon" aria-hidden="true"><span
                                                 id="mobile-cart-products-count"
                                                 class="cart-products-count cart-products-count-btn">
                                             </span></i>

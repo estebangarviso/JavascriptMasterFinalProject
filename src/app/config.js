@@ -1,5 +1,6 @@
 const config = require('./config.defaults.json')
 const currencies = require('../json/currencies.json')
+const author = require('../../package.json').author
 require('dotenv').config()
 const defaultParameters = {
   iso_code: config.iso_code,
@@ -13,6 +14,7 @@ const defaultParameters = {
       highlight_typo: 'Poppins',
     },
     header_text: 'Envío a todo el mundo ✈️',
+    copyrights: { author: author },
   },
   page: {
     page_name: 'spa',

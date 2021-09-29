@@ -134,28 +134,49 @@ export default class Shoppingcart extends Component {
     const mobileToggle = document.getElementById('mobile-cart-toogle')
     const closeCartBtn = document.getElementById('js-cart-close')
 
+    // Toggel in this case doens't work because it blockcart content move by responsive
     const handler = () => {
       const mobileBlockCart = document.getElementById('mobile-cart-wrapper')
       const desktopBlockCart = document.getElementById('blockcart')
-
-      if (desktopBlockCart.querySelector('.blockcart-content')) {
-        desktopBlockCart.classList.toggle('show')
+      const desktopBlockcartContent = document.getElementById(
+        '_desktop_blockcart-content'
+      )
+      const mobileBlockcartContent = document.getElementById(
+        '_mobile_blockcart-content'
+      )
+      if (!desktopBlockcartContent.classList.contains('show')) {
+        desktopBlockCart.classList.add('show')
         document
           .getElementById('_desktop_blockcart-content')
-          .classList.toggle('show')
+          .classList.add('show')
+      } else {
+        desktopBlockCart.classList.remove('show')
+        document
+          .getElementById('_desktop_blockcart-content')
+          .classList.remove('show')
       }
 
-      if (mobileBlockCart.querySelector('.blockcart-content')) {
-        mobileBlockCart.classList.toggle('show')
+      if (!mobileBlockcartContent.classList.contains('show')) {
+        mobileBlockCart.classList.add('show')
         document
           .getElementById('_mobile_blockcart-content')
-          .classList.toggle('show')
+          .classList.add('show')
+      } else {
+        mobileBlockCart.classList.remove('show')
+        document
+          .getElementById('_mobile_blockcart-content')
+          .classList.remove('show')
       }
     }
-
-    if (closeCartBtn) closeCartBtn.addEventListener('click', handler)
-    if (desktopToggle) desktopToggle.addEventListener('click', handler)
-    if (mobileToggle) mobileToggle.addEventListener('click', handler)
+    document.body.addEventListener('responsive update', (event) => {
+      console.log(event)
+      if (closeCartBtn) {
+        closeCartBtn.addEventListener('click', handler, false)
+      }
+    })
+    if (closeCartBtn) closeCartBtn.addEventListener('click', handler, false)
+    if (desktopToggle) desktopToggle.addEventListener('click', handler, false)
+    if (mobileToggle) mobileToggle.addEventListener('click', handler, false)
   }
 
   public refresh() {
@@ -187,26 +208,81 @@ export default class Shoppingcart extends Component {
     )
     if (btn)
       btn.addEventListener('click', async () => {
-        const promise = await new Promise((resolve) => {
+        await new Promise((resolve) => {
           const cart_products = Data.getCartProducts()
+
           addToCartBtns.forEach((btn) => btn.setAttribute('disabled', ''))
           btn.classList.add('processing-purchase')
+
           return setTimeout(() => {
             resolve(cart_products)
           }, 3000)
-        }).then((respose) => {
-          // POST request to backend validations
-          console.log(respose)
+        }).then((response) => {
+          // Buy all products from cart
+          let last_purchases = JSON.parse(
+            localStorage.getItem('last_purchases')
+          )
+          const first_purchase = !last_purchases ? true : false
+          // Set unique product ids
+          let uniqueIds = new Set()
+          const result: { id_product: number; stock_taken: number }[] = []
+
+          response = (
+            response as { id_product: number; cart_quantity: number }[]
+          ).map((product) => ({
+            id_product: product.id_product,
+            stock_taken: product.cart_quantity,
+          }))
+          // Disorder
+          last_purchases = [
+            ...(response as { id_product: number; stock_taken: number }[]),
+            ...(last_purchases
+              ? (last_purchases as {
+                  id_product: number
+                  stock_taken: number
+                }[])
+              : []),
+          ]
+          if (!first_purchase) {
+            ;(
+              last_purchases as { id_product: number; stock_taken: number }[]
+            ).map((last_purchase) => uniqueIds.add(last_purchase.id_product))
+            // Merge product taken in unique product id
+            Array.from(uniqueIds).forEach((id_product) => {
+              const stock_taken = (
+                last_purchases as {
+                  id_product: number
+                  stock_taken: number
+                }[]
+              ).reduce(
+                (accumulator, last_purchase) =>
+                  last_purchase.id_product === id_product
+                    ? accumulator + last_purchase.stock_taken
+                    : accumulator,
+                0
+              )
+
+              result.push({
+                id_product: id_product as number,
+                stock_taken: stock_taken,
+              })
+            })
+          }
+
+          localStorage.setItem(
+            'last_purchases',
+            JSON.stringify(first_purchase ? last_purchases : result)
+          )
+          this.products = []
+          this.refresh()
+
           this.notifications.addSuccess =
             '<i class="fas fa-check"></i> Gracias por su compra!😊'
           btn.classList.remove('processing-purchase')
           addToCartBtns.forEach((btn) => btn.removeAttribute('disabled'))
-          // Remove all products from cart
-          this.removeAll()
         })
       })
   }
-
   public setRemoveAllProducts() {
     {
       const btn = document.getElementById('shopping-cart-restore-btn')

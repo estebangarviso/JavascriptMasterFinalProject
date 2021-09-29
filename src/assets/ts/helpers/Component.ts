@@ -5,6 +5,7 @@ export default abstract class Component implements ComponentInterface {
   private element: HTMLElement | null = null
   protected truncateString = Data.truncateString
 
+  
   public set component(component: HTMLElement | null) {
     if (this.element) this.element = component
     else throw new Error("Component can't be set")

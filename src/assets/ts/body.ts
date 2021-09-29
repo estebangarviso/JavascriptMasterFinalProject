@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     catalog: document.getElementById('js-product'),
     cart: document.getElementById('js-shopping-cart'),
     cartWrapper: document.getElementById('shopping-cart-wrapper'),
+    restoreStockBtn: document.getElementById('restore-catalog-stock'),
   }
 
   // Load Data
@@ -83,4 +84,9 @@ document.addEventListener('DOMContentLoaded', async function () {
   )
   if (addToCartBtns && isLogged)
     addToCartBtns.forEach((btn) => btn.removeAttribute('disabled'))
+  // Refresh Stocks Button
+  DOMComponents.restoreStockBtn.addEventListener('click', (event) => {
+    localStorage.removeItem('last_purchases')
+    window.location.reload()
+  })
 })

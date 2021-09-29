@@ -34,6 +34,9 @@
                     {{{/block}}}
                 </div>
         </section>
+        <footer id="footer">
+            {{include file="src/templates/_partials/footer.tpl"}}
+        </footer>
     </main>
     {{$javascript.bottom}}
 
