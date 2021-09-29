@@ -41,6 +41,9 @@
     .remove-from-cart > i {
       color: $white;
     }
+    .regular-price {
+      text-decoration: line-through;
+    }
   }
   .block-cart-product-quantity-gift {
     background: inherit;
@@ -57,7 +60,11 @@
     line-height: 1.2em;
     border-top: 2px solid $gray;
   }
-
+  .cart-buttons {
+    .spinner-icon {
+      display: none;
+    }
+  }
   a:not(.btn) {
     &:hover {
       opacity: 0.8;

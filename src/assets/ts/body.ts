@@ -5,24 +5,18 @@ import Notifications from '@components/common/notifications'
 import Catalog from '@components/catalog'
 import Currency from '@components/modules/currency'
 import Data from '@helpers/Data'
-import { fadeOut } from '@components/common/preloader'
 import Touchspin from '@components/common/touchspin'
 import Carrier from '@components/common/carrier'
 import { Responsive } from '@components/common/responsive'
+import Preloader from '@components/preloader'
 
 document.addEventListener('DOMContentLoaded', async function () {
   // Declaring components in DOM
   const DOMComponents = {
-    preloader: document.getElementById('page-preloader'),
     catalog: document.getElementById('js-product'),
     cart: document.getElementById('js-shopping-cart'),
     cartWrapper: document.getElementById('shopping-cart-wrapper'),
   }
-
-  // Preloader
-  fadeOut(DOMComponents.preloader, 2000, function () {
-    DOMComponents.preloader.remove()
-  })
 
   // Load Data
   const data = new Data({
@@ -46,6 +40,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   })
   const authentication = new AuthenticationForm(data)
   const responsive = new Responsive()
+  const preloader = new Preloader()
 
   // Initializing components
   // Authentication Form
@@ -60,6 +55,8 @@ document.addEventListener('DOMContentLoaded', async function () {
   currency.init()
   // Responsive
   responsive.init()
+  // Preloader
+  preloader.init()
 
   // Adding static functionatities
   // Add Welcome Notification

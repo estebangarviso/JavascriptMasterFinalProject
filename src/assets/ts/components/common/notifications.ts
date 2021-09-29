@@ -1,6 +1,6 @@
 import { NotificationInterface } from '@interfaces'
 import Component from '@helpers/Component'
-import { fadeOut } from './preloader'
+import { fadeOut } from './animations'
 
 export default class Notifications
   extends Component
@@ -60,7 +60,6 @@ export default class Notifications
     const event = new Event('show notification')
     const element = this.component
     document.body.dispatchEvent(event)
-    document.getElementById('header').scrollIntoView()
     const alert = element.querySelector('.alert')
     fadeOut(alert as HTMLElement, 5000, () => alert.remove())
     this.clean()

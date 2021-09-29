@@ -132,18 +132,20 @@
     left: 0;
     z-index: 5000;
     width: 100%;
+    padding: 5px 0;
   }
 }
 
 #mobile-header-sticky {
   &.stuck-down {
+    background-color: rgba($color: tint($primary, 60%), $alpha: 0.65);
     position: fixed;
     top: 0;
     left: 0;
     z-index: 5000;
     width: 100%;
   }
-
+  // TODO TS Functionalitties
   &.stuck-up {
     &.visible-stuck-up {
       position: fixed;

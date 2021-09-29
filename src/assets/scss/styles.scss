@@ -6,6 +6,7 @@
 @import '../fonts/fontawesome-pro/scss/fontawesome.scss';
 @import '../fonts/fontawesome-pro/scss/solid.scss';
 /*** COMPONENTS ***/
+@import './_partials/animations';
 @import './components/authentication';
 @import './components/products';
 @import './components/shoppingcart';

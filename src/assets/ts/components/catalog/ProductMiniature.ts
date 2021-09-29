@@ -63,9 +63,11 @@ export default class ProductMiniature
       this.availability_message = 'Agotado'
     }
   }
+
   public init(): void {
     throw new Error('Method not implemented.')
   }
+
   public render() {
     return /* HTML */ `<div
       class="js-product-miniature-wrapper col-12 col-md-4 col-lg-4 col-xl-4"

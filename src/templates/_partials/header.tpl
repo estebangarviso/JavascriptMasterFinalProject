@@ -32,36 +32,39 @@
     </div>
 {{{/block}}}
 {{{block header_mobile}}}
-    <div id="mobile-header" class="mobile-header">
-        <div id="mobile-header-sticky">
-            <div class="container">
-                <div class="mobile-main-bar">
-                    <div class="row no-gutters align-items-center row-mobile-header">
-                        <div class="col col-auto col-mobile-btn col-mobile-btn-menu col-mobile-menu">
-                            <div class="m-nav-btn" data-toggle="dropdown" data-display="static"><i class="fas fa-bars"
-                                    aria-hidden="true"></i>
-                            </div>
-                            <div id="mobile_menu_click_overlay"></div>
-                            <div id="_mobile_menu-mobile" class="dropdown-menu-custom dropdown-menu"></div>
-                        </div>
-                        <div class="col col-mobile-logo text-center">
-                            <a href="#mobile-header">
-                                <div id="mobile_logo" class="logo img-fluid"></div>
-                            </a>
-                        </div>
-                        <div class="col col-auto col-mobile-btn col-mobile-btn-account">
-                            <div class="m-nav-btn"><i class="fa fa-user" aria-hidden="true"></i>
-                            </div>
-                        </div>
-                        <div class="col col-auto col-mobile-btn col-mobile-btn-cart js-shopping-cart side-cart">
-                            <div id="mobile-cart-wrapper">
-                                <div id="mobile-cart-toogle" class="m-nav-btn" data-toggle="dropdown" data-display="static">
-                                    <i class="fa fa-shopping-cart mobile-cart-icon" aria-hidden="true"><span
-                                            id="mobile-cart-products-count"
-                                            class="cart-products-count cart-products-count-btn">
-                                        </span></i>
+    <div class="sticky-mobile-wrapper">
+        <div id="mobile-header" class="mobile-header">
+            <div id="mobile-header-sticky">
+                <div class="container">
+                    <div class="mobile-main-bar">
+                        <div class="row no-gutters align-items-center row-mobile-header">
+                            <div class="col col-auto col-mobile-btn col-mobile-btn-menu col-mobile-menu">
+                                <div class="m-nav-btn" data-toggle="dropdown" data-display="static"><i class="fas fa-bars"
+                                        aria-hidden="true"></i>
                                 </div>
-                                <div id="_mobile_blockcart-content" class="dropdown-menu-custom dropdown-menu"></div>
+                                <div id="mobile_menu_click_overlay"></div>
+                                <div id="_mobile_menu-mobile" class="dropdown-menu-custom dropdown-menu"></div>
+                            </div>
+                            <div class="col col-mobile-logo text-center">
+                                <a href="#mobile-header">
+                                    <div id="mobile_logo" class="logo img-fluid"></div>
+                                </a>
+                            </div>
+                            <div class="col col-auto col-mobile-btn col-mobile-btn-account">
+                                <div class="m-nav-btn"><i class="fa fa-user" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                            <div class="col col-auto col-mobile-btn col-mobile-btn-cart js-shopping-cart side-cart">
+                                <div id="mobile-cart-wrapper">
+                                    <div id="mobile-cart-toogle" class="m-nav-btn" data-toggle="dropdown"
+                                        data-display="static">
+                                        <i class="fa fa-shopping-cart mobile-cart-icon" aria-hidden="true"><span
+                                                id="mobile-cart-products-count"
+                                                class="cart-products-count cart-products-count-btn">
+                                            </span></i>
+                                    </div>
+                                    <div id="_mobile_blockcart-content" class="dropdown-menu-custom dropdown-menu"></div>
+                                </div>
                             </div>
                         </div>
                     </div>

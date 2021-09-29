@@ -180,6 +180,30 @@ export default class Shoppingcart extends Component {
     document.body.dispatchEvent(cartUpdatedEvent)
   }
 
+  public setConfirmationCart() {
+    const btn = document.getElementById('shopping-cart-confirm-btn')
+    if (btn)
+      btn.addEventListener('click', () => {
+        setTimeout(() => {
+          this.notifications.addSuccess =
+            '<i class="fas fa-check"></i> Gracias por su compra!😊'
+          window.scrollTo()
+        }, 3000)
+      })
+  }
+
+  public setRemoveAllProducts() {
+    {
+      const btn = document.getElementById('shopping-cart-restore-btn')
+      if (btn)
+        btn.addEventListener('click', () => {
+          this.products = []
+          localStorage.removeItem('cart_products')
+          this.refresh()
+        })
+    }
+  }
+
   public setRemoveProduct() {
     const removeFromCart = document.querySelectorAll(`.remove-from-cart`)
     if (removeFromCart) {
@@ -315,22 +339,20 @@ export default class Shoppingcart extends Component {
         )
       )
     this.render()
-    // Remove all products callback
-    const removeAll = () => {
-      const btn = document.getElementById('shopping-cart-restore-btn')
-      if (btn)
-        btn.addEventListener('click', (event: Event) => {
-          this.products = []
-          localStorage.removeItem('cart_products')
-          this.refresh()
-        })
-    }
-    removeAll()
+
+    this.setRemoveAllProducts()
+    this.setConfirmationCart()
     this.setRemoveProduct()
     this.showCartContent()
     this.toggleCartQtyIcon()
+    const desktopCartQtyIconText = document.getElementById(
+      'desktop-cart-products-count'
+    ).innerText
+    document.getElementById('mobile-cart-products-count').innerText =
+      desktopCartQtyIconText
     document.body.addEventListener('cart updated', () => {
-      removeAll()
+      this.setRemoveAllProducts()
+      this.setConfirmationCart()
       this.setRemoveProduct()
       this.showCartContent()
       this.toggleCartQtyIcon()
@@ -475,7 +497,11 @@ export default class Shoppingcart extends Component {
                   id="shopping-cart-confirm-btn"
                   class="btn btn-primary w-100 btn-lg mb-2"
                 >
-                  Realizar compra</a
+                  <i
+                    class="fas fa-circle-notch fa-spin fa-fw spinner-icon"
+                    aria-hidden="true"
+                  ></i
+                  >Realizar compra</a
                 >
                 <a
                   href="javascript:void(0)"

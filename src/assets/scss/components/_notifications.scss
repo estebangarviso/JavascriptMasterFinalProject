@@ -164,13 +164,20 @@
   color: #a94442 !important;
   background-color: #f2dede !important;
 }
-//fix
+//alert notifications
 #js-notifications {
+  display: flex;
+  align-content: center;
+  justify-content: center;
   ul {
     list-style-type: none;
     margin-bottom: 0;
   }
   .alert {
     margin-top: 1rem;
+    position: fixed;
+    z-index: 100;
+    text-align: center;
+    width: 100%;
   }
 }
