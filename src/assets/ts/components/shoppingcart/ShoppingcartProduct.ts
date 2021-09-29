@@ -98,17 +98,8 @@ export default class ShoppingcartProduct
         </div>
 
         <div class="row align-items-center mt-2 g-0s">
-          <div class="col mr-2">
-            <input
-              class="cart-product-quantity form-control js-cart-line-product-quantity"
-              data-product-id="${this.id_product}"
-              type="number"
-              value="${this.cart_quantity}"
-              name="product-quantity-spin"
-              min="1"
-            />
-          </div>
           <div class="col">
+            <span class="product-quantity">${this.cart_quantity}</span>
             <span class="text-muted">x</span>
             <span
               class="product-price"

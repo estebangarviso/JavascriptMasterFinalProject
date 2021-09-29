@@ -125,8 +125,6 @@ export default class Notifications
    * @return {string}
    */
   public get renderInfo(): string {
-    console.log(this._info)
-
     if (this.info)
       return /* HTML */ `
         <article class="alert alert-info" role="alert" data-alert="info">

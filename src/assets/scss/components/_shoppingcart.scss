@@ -61,6 +61,11 @@
     border-top: 2px solid $gray;
   }
   .cart-buttons {
+    .processing-purchase {
+      .spinner-icon {
+        display: inline-block;
+      }
+    }
     .spinner-icon {
       display: none;
     }

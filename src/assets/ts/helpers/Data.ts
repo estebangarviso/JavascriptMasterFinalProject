@@ -34,15 +34,6 @@ export default class Data {
     this.customers = params.customers
     this.carriers = params.carriers
   }
-  /**
-   * Init data on localStorage
-   */
-  // async init() {
-  //   const currency = await Data.getCurrency()
-  //   const cart_products = Data.getCartProducts()
-  //   localStorage.setItem('currency', currency)
-  //   localStorage.setItem('cart_products', JSON.stringify(cart_products))
-  // }
 
   /**
    * Select a product

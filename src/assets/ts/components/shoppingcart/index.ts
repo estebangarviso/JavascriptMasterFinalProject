@@ -182,13 +182,28 @@ export default class Shoppingcart extends Component {
 
   public setConfirmationCart() {
     const btn = document.getElementById('shopping-cart-confirm-btn')
+    const addToCartBtns = document.querySelectorAll(
+      '.product-miniature .add-to-cart'
+    )
     if (btn)
-      btn.addEventListener('click', () => {
-        setTimeout(() => {
+      btn.addEventListener('click', async () => {
+        const promise = await new Promise((resolve) => {
+          const cart_products = Data.getCartProducts()
+          addToCartBtns.forEach((btn) => btn.setAttribute('disabled', ''))
+          btn.classList.add('processing-purchase')
+          return setTimeout(() => {
+            resolve(cart_products)
+          }, 3000)
+        }).then((respose) => {
+          // POST request to backend validations
+          console.log(respose)
           this.notifications.addSuccess =
             '<i class="fas fa-check"></i> Gracias por su compra!😊'
-          window.scrollTo()
-        }, 3000)
+          btn.classList.remove('processing-purchase')
+          addToCartBtns.forEach((btn) => btn.removeAttribute('disabled'))
+          // Remove all products from cart
+          this.removeAll()
+        })
       })
   }
 
