@@ -48,33 +48,34 @@ document.addEventListener('DOMContentLoaded', async function () {
   const responsive = new Responsive()
 
   // Initializing components
+  // Authentication Form
+  authentication.init()
+  // Notifications
+  notifications.init()
   // Catalog
   catalog.init()
-  let productMiniatures = document.querySelectorAll('.product-miniature')
   // Shoppingcart
   cart.init()
   // Currency
   currency.init()
-  // Authentication Form
-  authentication.init()
   // Responsive
   responsive.init()
-  // Notifications
-  notifications.init()
-  // Add Info Notification
-  notifications.addInfo = '✨Bienvenido!'
 
+  // Adding static functionatities
+  // Add Welcome Notification
+  notifications.addInfo = '✨Bienvenido!'
   // Add Spinner to products input[type=number]
-  productMiniatures.forEach(
-    (product) =>
-      new Touchspin(
-        product.querySelector('.input-group-add-cart'),
-        '.input-qty',
-        '<i class="fas fa-minus touchspin-down"></i>',
-        '<i class="fas fa-plus touchspin-up"></i>'
-      )
-  )
-  // Adding functionatities
+  document
+    .querySelectorAll('.product-miniature')
+    .forEach(
+      (product) =>
+        new Touchspin(
+          product.querySelector('.input-group-add-cart'),
+          '.input-qty',
+          '<i class="fas fa-minus touchspin-down"></i>',
+          '<i class="fas fa-plus touchspin-up"></i>'
+        )
+    )
   // Check if customer is logged
   const isLogged = JSON.parse(localStorage.getItem('isLogged'))
   // Hide cart if customer is not logged

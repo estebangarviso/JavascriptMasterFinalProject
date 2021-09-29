@@ -5,6 +5,7 @@ export default class ProductMiniature
   extends Component
   implements ProductInterface
 {
+  private LAST_REMAINING_QTY = 2
   public id_product: number
   public sku: string
   public brand: string
@@ -45,13 +46,16 @@ export default class ProductMiniature
     })()
     this.img = product.img
     this.stock = product.stock
+    this.updateStatusMessages()
+  }
+  public updateStatusMessages() {
     if (this.stock <= 0) {
       this.availability = 'unavailable'
       this.availability_message = 'Agotado'
-    } else if (this.stock <= 2) {
+    } else if (this.stock <= this.LAST_REMAINING_QTY) {
       this.availability = 'last_remaining_items'
       this.availability_message = 'Últimos productos'
-    } else if (this.stock > 2) {
+    } else if (this.stock > this.LAST_REMAINING_QTY) {
       this.availability = 'available'
       this.availability_message = 'Disponible para pedido'
     } else {
@@ -81,22 +85,7 @@ export default class ProductMiniature
               class="img-fluid product-thumbnail-first"
             />
           </div>
-          <div class="product-availability d-block">
-            <span
-              class="badge ${this.stock <= 0
-                ? 'bg-danger product-unavailable'
-                : 'bg-success product-available'} ${this.stock > 0 &&
-              this.availability === 'last_remaining_items'
-                ? 'bg-warning product-last-items'
-                : ''} mt-2"
-            >
-              ${this.availability === 'available'
-                ? `<i class="fas fa-check rtl-no-flip" aria-hidden="true"></i> ${this.availability_message}`
-                : this.availability === 'last_remaining_items'
-                ? `<i class="fas fa-exclamation" aria-hidden="true"></i> ${this.availability_message}`
-                : `<i class="fas fa-ban" aria-hidden="true"></i> ${this.availability_message}`}
-            </span>
-          </div>
+          <div class="product-availability d-block">${this.renderStatus}</div>
         </div>
         <div class="product-description">
           <div class="row extra-small-gutters justify-content-end">
@@ -108,7 +97,7 @@ export default class ProductMiniature
               </div>
               <div class="product-price-and-shipping">
                 <p class="product-stock text-muted" data-stock="${this.stock}">
-                  ${this.stock ? `${this.stock} unidades en stock` : ''}
+                  ${this.renderStock}
                 </p>
                 <span
                   class="product-price"
@@ -157,5 +146,25 @@ export default class ProductMiniature
         </span>
       </article>
     </div>`
+  }
+  public get renderStatus() {
+    this.updateStatusMessages()
+    return /* HTML */ `<span
+      class="badge ${this.stock <= 0
+        ? 'bg-danger product-unavailable'
+        : 'bg-success product-available'} ${this.stock > 0 &&
+      this.availability === 'last_remaining_items'
+        ? 'bg-warning product-last-items'
+        : ''} mt-2"
+    >
+      ${this.availability === 'available'
+        ? `<i class="fas fa-check rtl-no-flip" aria-hidden="true"></i> ${this.availability_message}`
+        : this.availability === 'last_remaining_items'
+        ? `<i class="fas fa-exclamation" aria-hidden="true"></i> ${this.availability_message}`
+        : `<i class="fas fa-ban" aria-hidden="true"></i> ${this.availability_message}`}
+    </span>`
+  }
+  public get renderStock() {
+    return /* HTML */ `${this.stock ? `${this.stock} unidades en stock` : ''}`
   }
 }

@@ -130,28 +130,32 @@ export default class Shoppingcart extends Component {
   }
 
   public showCartContent() {
-    const toggle = document.getElementById('cart-toogle')
-    const close = document.getElementById('js-cart-close')
-    const desktopCartContent = document.getElementById(
-      '_desktop_blockcart-content'
-    )
-    const mobileCartContent = document.getElementById(
-      '_mobile_blockcart-content'
-    )
+    const desktopToggle = document.getElementById('cart-toogle')
+    const mobileToggle = document.getElementById('mobile-cart-toogle')
+    const closeCartBtn = document.getElementById('js-cart-close')
+
     const handler = () => {
-      // is in desktop
-      if (desktopCartContent.querySelector('#blockcart-content')) {
-        document.getElementById('blockcart').classList.toggle('show')
-        desktopCartContent.classList.toggle('show')
+      const mobileBlockCart = document.getElementById('mobile-cart-wrapper')
+      const desktopBlockCart = document.getElementById('blockcart')
+
+      if (desktopBlockCart.querySelector('.blockcart-content')) {
+        desktopBlockCart.classList.toggle('show')
+        document
+          .getElementById('_desktop_blockcart-content')
+          .classList.toggle('show')
       }
-      // is in mobile
-      if (mobileCartContent.querySelector('#blockcart-content')) {
-        document.getElementById('mobile-cart-wrapper').classList.toggle('show')
-        mobileCartContent.classList.toggle('show')
+
+      if (mobileBlockCart.querySelector('.blockcart-content')) {
+        mobileBlockCart.classList.toggle('show')
+        document
+          .getElementById('_mobile_blockcart-content')
+          .classList.toggle('show')
       }
     }
-    if (toggle) toggle.addEventListener('click', handler)
-    if (close) close.addEventListener('click', handler)
+
+    if (closeCartBtn) closeCartBtn.addEventListener('click', handler)
+    if (desktopToggle) desktopToggle.addEventListener('click', handler)
+    if (mobileToggle) mobileToggle.addEventListener('click', handler)
   }
 
   public refresh() {
@@ -176,68 +180,93 @@ export default class Shoppingcart extends Component {
     document.body.dispatchEvent(cartUpdatedEvent)
   }
 
-  public addProduct(id_product: number, quantity: number) {
-    let _product = this.data.getProductById(id_product)
-    let product = new ShoppingcartProduct(this.currency, _product, quantity)
-    if (this.hasProducts) {
-      let cart_product = this.products.filter(
-        (product) => product.id_product === id_product
-      )[0]
+  public setRemoveProduct() {
+    const removeFromCart = document.querySelectorAll(`.remove-from-cart`)
+    if (removeFromCart) {
+      removeFromCart.forEach((remove) =>
+        remove.addEventListener('click', (event: Event) => {
+          const id_product = (event.currentTarget as HTMLElement).getAttribute(
+            'data-id-product'
+          )
 
-      if (cart_product) cart_product.fix = cart_product.cart_quantity + quantity
-
-      let rest_products = this.products.filter(
-        (product) => product.id_product !== id_product
+          if (id_product) this.removeProduct(+id_product)
+        })
       )
-      if (cart_product) this.products = [...rest_products, cart_product]
-      else this.products = [...rest_products, product]
-    } else {
-      this.products.push(product)
     }
+  }
 
-    this.refresh()
-    this.component
-      .querySelector('.remove-from-cart')
-      .addEventListener('click', (event: Event) => {
-        const id_product = (event.target as HTMLElement).getAttribute(
-          'data-id-product'
+  public addProduct(id_product: number, quantity: number) {
+    if (!this.isProductOutOfStock(id_product)) {
+      let _product = this.data.getProductById(id_product)
+      let product = new ShoppingcartProduct(this.currency, _product, quantity)
+      if (this.hasProducts) {
+        let cart_product = this.products.filter(
+          (product) => product.id_product === id_product
+        )[0]
+
+        if (cart_product)
+          cart_product.fix = cart_product.cart_quantity + quantity
+
+        let rest_products = this.products.filter(
+          (product) => product.id_product !== id_product
         )
-        this.removeProduct(+id_product)
-      })
+        if (cart_product) this.products = [...rest_products, cart_product]
+        else this.products = [...rest_products, product]
+      } else {
+        this.products.push(product)
+      }
+      this.updateStock(id_product, quantity, false)
+      this.refresh()
+    }
   }
 
   public increaseProduct(id_product: number) {
-    let outofstock = this.isProductOutOfStock(id_product)
-    if (!outofstock) {
+    if (!this.isProductOutOfStock(id_product)) {
       for (let product of this.products) {
         if (product.id_product === id_product) {
           product.increase
           continue
         }
       }
+      this.updateStock(id_product, 1, false)
       this.refresh()
     }
   }
 
   public decreaseProduct(id_product: number) {
-    let outofstock = this.isProductOutOfStock(id_product)
-    if (!outofstock) {
+    if (!this.isProductOutOfStock(id_product)) {
       for (let product of this.products) {
         if (product.id_product === id_product) {
           product.decrease
           continue
         }
       }
+      this.updateStock(id_product, 1, true)
       this.refresh()
     }
   }
 
   public removeProduct(id_product: number) {
-    this.products.filter((product) => product.id_product !== id_product)
-    this.refresh()
+    const product = this.products.filter(
+      (product) => product.id_product === id_product
+    )[0]
+    if (product) {
+      this.updateStock(product.id_product, product.cart_quantity, true)
+      this.products = this.products.filter(
+        (product) => product.id_product !== id_product
+      )
+      this.refresh()
+    }
   }
 
   public removeAll() {
+    this.products.forEach((cart_product) => {
+      this.catalog.products.forEach((product) => {
+        if (product.id_product === cart_product.id_product)
+          this.updateStock(product.id_product, cart_product.cart_quantity, true)
+      })
+    })
+
     this.products = []
     this.refresh()
   }
@@ -261,6 +290,9 @@ export default class Shoppingcart extends Component {
       this.products = products
       this.setQuantities()
       this.setSubtotals()
+      cart_products.map((product) =>
+        this.updateStock(product.id_product, product.cart_quantity, false)
+      )
     }
     // Enable add to cart buttons if customer is logged
     const addToCartBtns = document.querySelectorAll(
@@ -294,22 +326,23 @@ export default class Shoppingcart extends Component {
         })
     }
     removeAll()
+    this.setRemoveProduct()
+    this.showCartContent()
+    this.toggleCartQtyIcon()
     document.body.addEventListener('cart updated', () => {
       removeAll()
+      this.setRemoveProduct()
       this.showCartContent()
       this.toggleCartQtyIcon()
-      let desktopCartQtyIconText = document.getElementById(
+      const desktopCartQtyIconText = document.getElementById(
         'desktop-cart-products-count'
       ).innerText
-
       document.getElementById('mobile-cart-products-count').innerText =
         desktopCartQtyIconText
     })
-    this.showCartContent()
   }
 
   private isProductOutOfStock(id_product: number): boolean {
-    // const productsStocks = document.querySelectorAll('.product-miniature .product-stock')
     let isOut = false
     const catalog_product = this.catalog.products.filter(
       (product) => product.id_product === id_product
@@ -317,16 +350,61 @@ export default class Shoppingcart extends Component {
     const cart_product = this.products.filter(
       (product) => product.id_product === id_product
     )[0]
-    isOut =
-      catalog_product.stock === 0 ||
-      catalog_product.stock < cart_product.cart_quantity
+    isOut = catalog_product.stock === 0
     if (isOut)
-      this.notifications.addError = 'El producto se encuentra fuera de stock'
-    return
+      this.notifications.addError =
+        '<i class="fas fa-ban"></i> El producto se encuentra fuera de stock'
+    return isOut
+  }
+
+  /**
+   * Sync stock Catalog with Cart Products
+   * @param {number} id_product - Product ID
+   * @param {number} quantity - Product quantity
+   * @param {boolean} backtostock - If is true return back to stock, false to take from stock
+   */
+  private updateStock(
+    id_product: number,
+    quantity: number,
+    backtostock: boolean
+  ) {
+    const cart_product = this.products.filter(
+      (product) => product.id_product === id_product
+    )[0]
+    if (cart_product) {
+      this.catalog.products.map((product) => {
+        if (product.id_product === cart_product.id_product) {
+          const cartUpdateEvent = new CustomEvent('cart update', {
+            detail: { product, cart_product, add: backtostock },
+          })
+          if (backtostock === true) product.stock += quantity
+          else product.stock -= quantity
+
+          const miniature = document.querySelector(
+            `.product-miniature[data-id-product="${id_product}"]`
+          )
+          if (miniature) {
+            const miniatureStock = miniature.querySelector('.product-stock')
+            const miniatureStatus = miniature.querySelector(
+              '.product-availability'
+            )
+            miniatureStock.innerHTML = product.renderStock
+            miniatureStatus.innerHTML = product.renderStatus
+          }
+          document.body.dispatchEvent(cartUpdateEvent)
+        }
+      })
+    }
   }
 
   public render() {
-    this.component.innerHTML = `${this.renderCart}`
+    this.component.innerHTML = this.renderCart
+    const mobileBlockCartContent = document.getElementById(
+      '_mobile_blockcart-content'
+    )
+    if (mobileBlockCartContent) {
+      mobileBlockCartContent.innerHTML = this.renderCartContent
+    }
   }
 
   public get renderCart() {

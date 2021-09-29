@@ -45,7 +45,7 @@ export default class Notifications
   }
 
   public init() {
-    this.component.addEventListener('show notification', () => this.render())
+    document.body.addEventListener('show notification', () => this.render())
   }
 
   public render(): void {
@@ -59,10 +59,23 @@ export default class Notifications
   private refresh(): void {
     const event = new Event('show notification')
     const element = this.component
-    element.dispatchEvent(event)
+    document.body.dispatchEvent(event)
+    document.getElementById('header').scrollIntoView()
     const alert = element.querySelector('.alert')
     fadeOut(alert as HTMLElement, 5000, () => alert.remove())
+    this.clean()
   }
+
+  /**
+   * Clean notification with rendering
+   */
+  private clean() {
+    this._error = ''
+    this._warning = ''
+    this._success = ''
+    this._info = ''
+  }
+
   /**
    * @desc Render if error exist
    * @return {string}

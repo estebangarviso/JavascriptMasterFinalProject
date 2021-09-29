@@ -1,4 +1,5 @@
 export class Responsive {
+  private isInitialized: boolean = false
   private _isMobile: boolean
   public get isMobile() {
     return this._isMobile
@@ -10,8 +11,8 @@ export class Responsive {
   public get mobileSize() {
     return this._mobileSize
   }
-  public get handler() {
-    return (event: Event) => {
+  public get updateHandler() {
+    return () => {
       const fragment = document.createDocumentFragment()
       const blockcartContent = document.getElementById('blockcart-content')
 
@@ -30,9 +31,13 @@ export class Responsive {
     }
   }
   init() {
-    this.stickyHeader()
-    this.resizeWidth()
-    this.handler
+    if (!this.isInitialized) {
+      this.stickyHeader()
+      this.resizeWidth()
+      this.windowResizeWidth()
+      this.updateHandler()
+      this.isInitialized = true
+    }
   }
 
   /**
@@ -43,20 +48,26 @@ export class Responsive {
    * Listen window when resize width
    */
   private resizeWidth() {
-    const body = document.body
-    body.addEventListener('responsive update', this.handler, false)
-    window.addEventListener('resize', (event: Event) => {
-      const responsiveEvent = new Event('responsive update')
-      const innerWidth = (event.target as Window).innerWidth
-      if (innerWidth > this.mobileSize && this.isMobile) {
-        this.isMobile = false
-        body.dispatchEvent(responsiveEvent)
-      } else if (innerWidth <= this.mobileSize && !this.isMobile) {
-        this.isMobile = true
-        body.dispatchEvent(responsiveEvent)
-      }
-    })
+    document.body.addEventListener(
+      'responsive update',
+      this.updateHandler,
+      false
+    )
+    window.addEventListener('resize', this.windowResizeWidth, false)
   }
+
+  private windowResizeWidth() {
+    const responsiveEvent = new Event('responsive update')
+    const innerWidth = window.innerWidth
+    if (innerWidth > this.mobileSize && this.isMobile) {
+      this.isMobile = false
+      document.body.dispatchEvent(responsiveEvent)
+    } else if (innerWidth <= this.mobileSize && !this.isMobile) {
+      this.isMobile = true
+      document.body.dispatchEvent(responsiveEvent)
+    }
+  }
+
   /**
    * Sticky header when going down go down the scroll
    */

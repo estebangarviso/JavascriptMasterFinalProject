@@ -1,6 +1,5 @@
 import Currency from '@components/modules/currency'
 import Component from '@helpers/Component'
-import Data from '@helpers/Data'
 import { ProductInterface, ShoppingcartProductInterface } from '@interfaces'
 
 export default class ShoppingcartProduct
@@ -77,23 +76,23 @@ export default class ShoppingcartProduct
   public refresh() {}
 
   public render() {
-    return /* HTML */ `<div class="row g-0s align-items-center">
+    return /* HTML */ `<div class="row g-0 align-items-center">
       <div class="col-3">
         <span class="product-image media-middle">
           <img src="${this.img}" alt="${this.name}" class="img-fluid" />
         </span>
       </div>
       <div class="col col-info">
-        <div class="pb-1"></div>
+        <div class="pb-1">${this.name}</div>
         <div class="product-attributes text-muted pb-1">
           <div class="product-line-info">
-            <span class="label font-weight-bold">SKU:</span>
+            <span class="label fw-bold">SKU:</span>
             <span class="value">${this.sku}</span>
           </div>
         </div>
         <div class="product-attributes text-muted pb-1">
           <div class="product-line-info">
-            <span class="label font-weight-bold">Marca:</span>
+            <span class="label fw-bold">Marca:</span>
             <span class="value">${this.brand}</span>
           </div>
         </div>

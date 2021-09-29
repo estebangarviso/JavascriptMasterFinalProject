@@ -5,7 +5,7 @@
   padding: 1rem;
   text-align: left;
   background-color: $primary;
-  color: white;
+  color: $white;
   .cart-title {
     hr {
       width: 100%;
@@ -37,6 +37,9 @@
         margin: 0;
         -webkit-appearance: none;
       }
+    }
+    .remove-from-cart > i {
+      color: $white;
     }
   }
   .block-cart-product-quantity-gift {
