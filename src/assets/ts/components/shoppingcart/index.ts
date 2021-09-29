@@ -588,6 +588,11 @@ export default class Shoppingcart extends Component {
                   id="shopping-cart-confirm-btn"
                   class="btn btn-primary w-100 btn-lg mb-2"
                 >
+                <i
+                    class="fad fa-paypal fa-fw"
+                    aria-hidden="true"
+                  ></i
+                  >
                   <i
                     class="fas fa-circle-notch fa-spin fa-fw spinner-icon"
                     aria-hidden="true"

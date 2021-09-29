@@ -61,9 +61,9 @@ npm run build
 ![Design Patterns and Classes](https://img.shields.io/badge/Design%20Patterns%20and%20Classes--F7DF1E?style=solid&labelColor=F7DF1E&logoColor=000000&logo=JavaScript)
 ![React / Angular Fundamentals](https://img.shields.io/badge/React%20%2F%20Angular%20Fundamentals--F7DF1E?style=solid&labelColor=F7DF1E&logoColor=000000&logo=JavaScript)
 
-### Objectives
-
-### Extra Features
+### Features
+- Typescript code sourcemap for Development Environment
+- Babel Polyfill code for production
 - Full responsive
 
 ### Contributions 🖇️

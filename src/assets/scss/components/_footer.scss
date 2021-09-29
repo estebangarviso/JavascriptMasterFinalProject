@@ -36,10 +36,10 @@
 
 //main foooter
 #footer-container-main {
-  &.footer-style-1{
-    .ps-emailsubscription-block{
+  &.footer-style-1 {
+    .ps-emailsubscription-block {
       .gdpr_module,
-      .ps-emailsubscription-conditions{
+      .ps-emailsubscription-conditions {
         max-width: 240px;
       }
     }
@@ -47,7 +47,7 @@
   //style-4 and 5
   &.footer-style-inline {
     .block-toggle {
-      margin-bottom: .4rem;
+      margin-bottom: 0.4rem;
     }
     > div > .row {
       display: block;
@@ -90,7 +90,7 @@
   &.footer-style-4 {
     text-align: center;
     .block-iqithtmlandbanners-html .block-content {
-      margin-top: .5rem;
+      margin-top: 0.5rem;
     }
   }
 
@@ -112,7 +112,7 @@
     text-align: center;
     .copyright-img,
     .copyright-txt {
-      margin-bottom: .8rem;
+      margin-bottom: 0.8rem;
     }
   }
   .copyright-txt > p:last-child {
@@ -132,7 +132,6 @@
 }
 
 @include media-breakpoint-down(xs) {
-
   //footer style-2
   .footer-style-2 {
     .block-newsletter {
@@ -164,6 +163,9 @@
       text-align: center !important;
     }
   }
-
 }
-
+#footer-copyrights .payment-method {
+  height: 75px;
+  width: auto;
+  content: url('../../img/cms/misc/PayPal.svg');
+}
