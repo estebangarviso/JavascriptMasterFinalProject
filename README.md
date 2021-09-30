@@ -54,9 +54,11 @@ npm run start
 npm run build
 ```
 
+###
+
 - Development port use port 3000 (Production don't use port http://localhost).
 - Visit base url [http://localhost:3000](http://localhost:3000) for development.
-- Modify base url in src/app/config.defaults.json file as you wish.
+- If you want to upload this project to a static server content, modify .env file with your server domain before running build npm script (ex: github pages).
 
 ### Status 📖
 
