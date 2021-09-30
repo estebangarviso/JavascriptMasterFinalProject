@@ -1,0 +1,9 @@
+[
+  {
+    "id_customer": 1,
+    "firstname": "John",
+    "lastname": "Doe",
+    "email": "demo@demo.com",
+    "password": "demodemo"
+  }
+]

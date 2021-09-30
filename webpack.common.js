@@ -7,8 +7,9 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
 const miniSVGDataURI = require('mini-svg-data-uri')
 const { templateParameters, favicons } = require('./src/app/config')
+const os = require('os')
 
-let config = (devMode = true) => {
+let config = (devMode = true, publicDir = 'dev') => {
   return {
     context: path.resolve(__dirname, 'src'),
     entry: {
@@ -19,13 +20,13 @@ let config = (devMode = true) => {
       filename: devMode
         ? '[name].js?[contenthash]'
         : '[name].min.js?[contenthash]',
-      path: path.resolve(__dirname, 'public'),
+      path: path.resolve(__dirname, publicDir),
       publicPath: '/',
       clean: true,
     },
     devServer: {
       static: {
-        directory: path.join(__dirname, 'public'),
+        directory: path.join(__dirname, publicDir),
       },
       open: true,
       port: 80,
@@ -36,7 +37,7 @@ let config = (devMode = true) => {
         new TsconfigPathsWebpackPlugin({
           configFile: './tsconfig.json',
           logLevel: 'info',
-          extensions: ['.ts'],
+          extensions: ['.ts', '.js'],
         }),
       ],
     },
@@ -45,12 +46,13 @@ let config = (devMode = true) => {
         {
           test: /\.(ts|js)$/,
           exclude: path.resolve(__dirname, 'node_modules'),
+          include: [path.resolve(__dirname, 'src')],
           use: [{ loader: devMode ? 'ts-loader' : 'babel-loader' }],
         },
         {
           test: /\.s[ac]ss$/,
           use: [
-            MiniCssExtractPluginLoader,
+            devMode ? 'style-loader' : MiniCssExtractPluginLoader,
             {
               loader: 'css-loader',
               options: {
@@ -72,7 +74,9 @@ let config = (devMode = true) => {
             {
               loader: 'sass-loader',
               options: {
-                sourceMap: devMode,
+                sourceMap: true,
+                // Prefer `dart-sass`
+                implementation: require.resolve('sass'),
               },
             },
           ],

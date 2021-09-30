@@ -62,9 +62,11 @@ npm run build
 ![React / Angular Fundamentals](https://img.shields.io/badge/React%20%2F%20Angular%20Fundamentals--F7DF1E?style=solid&labelColor=F7DF1E&logoColor=000000&logo=JavaScript)
 
 ### Features
+
 - Typescript code sourcemap for Development Environment
 - Babel Polyfill code for production
 - Full responsive
+- Project management with [GITHUB](https://github.com/users/estebangarviso/projects/2)
 
 ### Contributions 🖇️
 

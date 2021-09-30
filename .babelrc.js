@@ -2,17 +2,20 @@ module.exports = (api) => {
   api.cache(true)
 
   const presets = [
-    '@babel/preset-typescript',
-    ['@babel/preset-env', { corejs: 3, useBuiltIns: 'usage', debug: true }],
+    require.resolve('@babel/preset-typescript'),
+    [
+      require.resolve('@babel/preset-env'),
+      { corejs: 3, useBuiltIns: 'usage', debug: true },
+    ],
   ]
   const plugins = [
     [
-      '@babel/plugin-transform-runtime',
+      require.resolve('@babel/plugin-transform-runtime'),
       {
         regenerator: true,
       },
     ],
-    ['@babel/plugin-proposal-class-properties'],
+    [require.resolve('@babel/plugin-proposal-class-properties')],
   ]
 
   return {

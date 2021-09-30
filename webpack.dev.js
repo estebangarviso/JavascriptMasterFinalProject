@@ -24,9 +24,9 @@ let config = merge(common, {
     ignored: '**/node_modules',
   },
   devServer: {
-    watchFiles: ['src/**/*', 'public/**/*'],
+    watchFiles: ['src/**/*', 'dev/**/*'],
     static: {
-      directory: path.join(__dirname, 'public'),
+      directory: path.join(__dirname, 'dev'),
       watch: {
         usePolling: false,
       },
