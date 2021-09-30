@@ -7,6 +7,10 @@ This is the 2nd course that belongs to the Escalab Academy's FULL STACK DEVELOPE
 
 Here my progress in the course like tasks and related projects is stored.
 
+## GIT Project 🔧
+
+- [Link](https://github.com/users/estebangarviso/projects/2)
+
 ## Install 🔧
 
 1. **Manual**
@@ -14,33 +18,44 @@ Here my progress in the course like tasks and related projects is stored.
 - Download the repository in .zip format and unzip to a folder.
 - Select the folder and right click open with your preferred code editor.
 - Run the index.html file in docs folder to view the exercise in your browser.
+- Choose dev or build folder to run the project in development or production mode.
+- Run Live Server VS Code extension.
 
 2. **From terminal**
 
 - Download and install [GIT](https://git-scm.com/downloads).
-- Open CMD or BASH terminal and type and press enter each line of command.
+- Download and install [Node](https://nodejs.dev/download).
+- Open CMD or BASH terminal and type and press enter each line of command (Server runs on development mode).
 
 ```sh
 cd <YOUR_PATH>
 git clone --branch <version> https://github.com/estebangarviso/JavascriptMasterFinalProject
 npm install
+npm run server
 ```
 
 ### Package Scripts 🛠️
 
-- Development Environment and Watch Files with sourceMap
-- Run Server in Development Environment and Watch Files with sourceMap
-- Production Environment without sourceMap
+**Development Environment and Watch Files with sourceMap**
 
 ```sh
 npm run dev
-npm run server
-npm run build
-
 ```
 
-- Then for production port 80 and for development port 3000 and press enter.
-- Visit base url [http://localhost:port](http://localhost:port).
+**Run Server in Development Environment and Watch Files with sourceMap**
+
+```sh
+npm run start
+```
+
+**Production Environment without sourceMap**
+
+```sh
+npm run build
+```
+
+- Development port use port 3000 (Production don't use port http://localhost).
+- Visit base url [http://localhost:3000](http://localhost:3000) for development.
 - Modify base url in src/app/config.defaults.json file as you wish.
 
 ### Status 📖
@@ -61,12 +76,11 @@ npm run build
 ![Design Patterns and Classes](https://img.shields.io/badge/Design%20Patterns%20and%20Classes--F7DF1E?style=solid&labelColor=F7DF1E&logoColor=000000&logo=JavaScript)
 ![React / Angular Fundamentals](https://img.shields.io/badge/React%20%2F%20Angular%20Fundamentals--F7DF1E?style=solid&labelColor=F7DF1E&logoColor=000000&logo=JavaScript)
 
-### Features
+### Features related to Javascript
 
-- Typescript code sourcemap for Development Environment
+- Typescript code sourcemap for development
 - Babel Polyfill code for production
-- Full responsive
-- Project management with [GITHUB](https://github.com/users/estebangarviso/projects/2)
+- Responsive events
 
 ### Contributions 🖇️
 
