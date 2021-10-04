@@ -24,6 +24,9 @@ async function fetchAsync<T = AsyncFetchType>(filename: string): Promise<T> {
   const startTime = performance.now()
   //console.log(`Fetching: ${filename} - start`)
   let response
+  filename = process.env.PUBLIC_PATH
+    ? process.env.PUBLIC_PATH + '/' + filename
+    : filename
   try {
     // default init callback for request
     const init = {

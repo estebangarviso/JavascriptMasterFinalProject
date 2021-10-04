@@ -7,7 +7,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
 const miniSVGDataURI = require('mini-svg-data-uri')
 const { templateParameters, favicons } = require('./src/app/config')
-const os = require('os')
+require('dotenv').config()
 
 let config = (devMode = true, publicDir = 'dev') => {
   return {
@@ -132,7 +132,7 @@ let config = (devMode = true, publicDir = 'dev') => {
       new FaviconsWebpackPlugin(favicons),
       new HtmlWebpackPlugin({
         template: './templates/index.tpl',
-        publicPath: '/',
+        publicPath: process.env.PUBLIC_PATH || '/',
         inject: false,
         templateParameters: templateParameters,
       }),

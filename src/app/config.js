@@ -40,11 +40,20 @@ exports.templateParameters = async (
   assetTags,
   options
 ) => {
-  const headTags = assetTags.headTags,
-    headPlugins = headTags
-      .filter((tag) => tag.meta.plugin !== 'html-webpack-plugin')
-      .map((tag) => tag.toString())
-      .join('')
+  const headTags = assetTags.headTags
+
+  const headPlugins = headTags
+    .filter((tag) => tag.meta.plugin !== 'html-webpack-plugin')
+    .map((tag) => {
+      if (
+        process.env.PUBLIC_PATH &&
+        tag.meta.plugin === 'favicons-webpack-plugin'
+      ) {
+        tag.attributes.href = process.env.PUBLIC_PATH + tag.attributes.href
+      }
+      return tag.toString()
+    })
+    .join('')
 
   /**
    * Define tags in Head Tag
