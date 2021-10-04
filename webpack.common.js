@@ -52,7 +52,7 @@ let config = (devMode = true, publicDir = 'dev') => {
         {
           test: /\.s[ac]ss$/,
           use: [
-            devMode ? 'style-loader' : MiniCssExtractPluginLoader,
+            MiniCssExtractPluginLoader,
             {
               loader: 'css-loader',
               options: {

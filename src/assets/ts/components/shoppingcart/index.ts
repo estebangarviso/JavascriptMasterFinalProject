@@ -7,11 +7,13 @@ import Carrier from '@components/common/carrier'
 import { ProductInterface } from '@interfaces'
 import Catalog from '@components/catalog'
 import Notifications from '@components/common/notifications'
+import Responsive from '@components/common/responsive'
 
 export default class Shoppingcart extends Component {
   public get component() {
     return document.getElementById('js-shopping-cart')
   }
+  private initialized: boolean = false
   private currency: Currency
   private carrier: Carrier
   private data: Data
@@ -128,13 +130,38 @@ export default class Shoppingcart extends Component {
       mobileCartQtyIcon.classList.add('d-none')
     }
   }
+  public appendBlockcart() {
+    const handler = (isMobile = Responsive.isMobileDevice) => {
+      const blockcartContent = document.getElementById('blockcart-content')
+      const fragment = document.createDocumentFragment()
+
+      if (isMobile) {
+        if (blockcartContent) fragment.appendChild(blockcartContent)
+        document
+          .getElementById('_mobile_blockcart-content')
+          .appendChild(fragment)
+      } else {
+        if (blockcartContent) fragment.appendChild(blockcartContent)
+        document
+          .getElementById('_desktop_blockcart-content')
+          .appendChild(fragment)
+      }
+    }
+    handler()
+    // Move black cart content from mobile/desktop to desktop/mobile
+    document.body.addEventListener(
+      'responsive update',
+      (event: CustomEventInit) => handler(event.detail.isMobile),
+      false
+    )
+  }
 
   public showCartContent() {
     const desktopToggle = document.getElementById('cart-toogle')
     const mobileToggle = document.getElementById('mobile-cart-toogle')
     const closeCartBtn = document.getElementById('js-cart-close')
 
-    // Toggel in this case doens't work because it blockcart content move by responsive
+    // Toggel in this case doens't work because it blockcart content move by events
     const handler = () => {
       const mobileBlockCart = document.getElementById('mobile-cart-wrapper')
       const desktopBlockCart = document.getElementById('blockcart')
@@ -144,39 +171,41 @@ export default class Shoppingcart extends Component {
       const mobileBlockcartContent = document.getElementById(
         '_mobile_blockcart-content'
       )
-      if (!desktopBlockcartContent.classList.contains('show')) {
-        desktopBlockCart.classList.add('show')
-        document
-          .getElementById('_desktop_blockcart-content')
-          .classList.add('show')
-      } else {
+
+      if (desktopBlockcartContent.classList.contains('show')) {
         desktopBlockCart.classList.remove('show')
         document
           .getElementById('_desktop_blockcart-content')
           .classList.remove('show')
+      } else {
+        desktopBlockCart.classList.add('show')
+        document
+          .getElementById('_desktop_blockcart-content')
+          .classList.add('show')
       }
 
-      if (!mobileBlockcartContent.classList.contains('show')) {
-        mobileBlockCart.classList.add('show')
-        document
-          .getElementById('_mobile_blockcart-content')
-          .classList.add('show')
-      } else {
+      if (mobileBlockcartContent.classList.contains('show')) {
         mobileBlockCart.classList.remove('show')
         document
           .getElementById('_mobile_blockcart-content')
           .classList.remove('show')
+      } else {
+        mobileBlockCart.classList.add('show')
+        document
+          .getElementById('_mobile_blockcart-content')
+          .classList.add('show')
       }
     }
-    document.body.addEventListener('responsive update', (event) => {
-      console.log(event)
-      if (closeCartBtn) {
-        closeCartBtn.addEventListener('click', handler, false)
-      }
-    })
-    if (closeCartBtn) closeCartBtn.addEventListener('click', handler, false)
-    if (desktopToggle) desktopToggle.addEventListener('click', handler, false)
-    if (mobileToggle) mobileToggle.addEventListener('click', handler, false)
+
+    if (closeCartBtn)
+      closeCartBtn.addEventListener('click', handler.bind(this), false)
+    if (desktopToggle)
+      desktopToggle.addEventListener('click', handler.bind(this), false)
+
+    if (!this.initialized) {
+      if (mobileToggle)
+        mobileToggle.addEventListener('click', handler.bind(this), false)
+    }
   }
 
   public refresh() {
@@ -409,6 +438,7 @@ export default class Shoppingcart extends Component {
         this.updateStock(product.id_product, product.cart_quantity, false)
       )
     }
+
     // Enable add to cart buttons if customer is logged
     const addToCartBtns = document.querySelectorAll(
       '.product-add-cart .add-to-cart'
@@ -430,11 +460,12 @@ export default class Shoppingcart extends Component {
         )
       )
     this.render()
+    this.appendBlockcart()
 
+    this.showCartContent()
     this.setRemoveAllProducts()
     this.setConfirmationCart()
     this.setRemoveProduct()
-    this.showCartContent()
     this.toggleCartQtyIcon()
     const desktopCartQtyIconText = document.getElementById(
       'desktop-cart-products-count'
@@ -442,10 +473,10 @@ export default class Shoppingcart extends Component {
     document.getElementById('mobile-cart-products-count').innerText =
       desktopCartQtyIconText
     document.body.addEventListener('cart updated', () => {
+      this.showCartContent()
       this.setRemoveAllProducts()
       this.setConfirmationCart()
       this.setRemoveProduct()
-      this.showCartContent()
       this.toggleCartQtyIcon()
       const desktopCartQtyIconText = document.getElementById(
         'desktop-cart-products-count'
@@ -453,6 +484,7 @@ export default class Shoppingcart extends Component {
       document.getElementById('mobile-cart-products-count').innerText =
         desktopCartQtyIconText
     })
+    this.initialized = true
   }
 
   private isProductOutOfStock(id_product: number): boolean {
@@ -512,12 +544,6 @@ export default class Shoppingcart extends Component {
 
   public render() {
     this.component.innerHTML = this.renderCart
-    const mobileBlockCartContent = document.getElementById(
-      '_mobile_blockcart-content'
-    )
-    if (mobileBlockCartContent) {
-      mobileBlockCartContent.innerHTML = this.renderCartContent
-    }
   }
 
   public get renderCart() {
@@ -588,7 +614,7 @@ export default class Shoppingcart extends Component {
                   id="shopping-cart-confirm-btn"
                   class="btn btn-primary w-100 btn-lg mb-2"
                 >
-                  <i class="fad fa-paypal fa-fw" aria-hidden="true"></i>
+                  <i class="fab fa-paypal fa-fw" aria-hidden="true"></i>
                   <i
                     class="fas fa-circle-notch fa-spin fa-fw spinner-icon"
                     aria-hidden="true"

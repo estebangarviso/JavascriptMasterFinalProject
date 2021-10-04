@@ -13,7 +13,7 @@ const defaultParameters = {
       default_typo: 'Lato',
       highlight_typo: 'Poppins',
     },
-    header_text: 'Envío a todo el mundo ✈️',
+    header_text: 'Envíos a todo el mundo ✈️',
     copyrights: { author: author },
   },
   page: {
@@ -25,6 +25,11 @@ const defaultParameters = {
       keywords: config.keywords.join(', '),
     },
     title: config.title,
+  },
+  modules: {
+    currencyselector: {
+      hook: 'footer', //header|footer
+    },
   },
 }
 

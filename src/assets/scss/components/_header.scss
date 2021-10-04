@@ -75,6 +75,13 @@
   }
   .col-mobile-logo {
     padding: 0 rem(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    #mobile_logo {
+      content: url('../../img/logo-mobile.svg');
+      width: 40px;
+    }
   }
   .col-mobile-btn {
     .m-nav-btn {

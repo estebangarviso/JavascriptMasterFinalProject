@@ -65,6 +65,9 @@
       .spinner-icon {
         display: inline-block;
       }
+      * {
+        display: none;
+      }
     }
     .spinner-icon {
       display: none;

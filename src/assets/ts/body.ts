@@ -7,7 +7,7 @@ import Currency from '@components/modules/currency'
 import Data from '@helpers/Data'
 import Touchspin from '@components/common/touchspin'
 import Carrier from '@components/common/carrier'
-import { Responsive } from '@components/common/responsive'
+import Responsive from '@components/common/responsive'
 import Preloader from '@components/preloader'
 
 document.addEventListener('DOMContentLoaded', async function () {

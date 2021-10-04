@@ -1,43 +1,19 @@
-export class Responsive {
+export default class Responsive {
+  public static mobileSize: number = 768
   private isInitialized: boolean = false
-  private _isMobile: boolean
-  public get isMobile() {
-    return this._isMobile
+  private isMobile: boolean
+  public static get isMobileDevice() {
+    return window.innerWidth < Responsive.mobileSize
   }
-  private set isMobile(value: boolean) {
-    this._isMobile = value
+  constructor() {
+    this.isMobile = window.innerWidth < Responsive.mobileSize
   }
-  private _mobileSize: number = 768
-  public get mobileSize() {
-    return this._mobileSize
-  }
-  private _overHeaderHeight: boolean
-  public get overHeaderHeight() {
-    return this._overHeaderHeight
-  }
-  private set overHeaderHeight(value: boolean) {
-    this._overHeaderHeight = value
-  }
-  public appendBlockcart() {
-    const blockcartContent = document.getElementById('blockcart-content')
 
-    // Move components to mobile
-    if (this.isMobile) {
-      document
-        .getElementById('_mobile_blockcart-content')
-        .appendChild(blockcartContent)
-    } else {
-      document
-        .getElementById('_desktop_blockcart-content')
-        .appendChild(blockcartContent)
-    }
-  }
   init() {
     if (!this.isInitialized) {
       this.stickyHeader()
       this.resizeWidth()
       this.windowResizeWidth()
-      this.appendBlockcart()
       this.isInitialized = true
     }
   }
@@ -46,23 +22,19 @@ export class Responsive {
    * Listen window when resize width
    */
   private resizeWidth() {
-    document.body.addEventListener(
-      'responsive update',
-      this.appendBlockcart,
-      false
-    )
-    window.addEventListener('resize', this.windowResizeWidth, false)
+    window.addEventListener('resize', this.windowResizeWidth.bind(this), false)
   }
 
-  private windowResizeWidth() {
+  public windowResizeWidth() {
     const innerWidth = window.innerWidth
-    if (innerWidth > this.mobileSize && this.isMobile) {
+
+    if (innerWidth > Responsive.mobileSize && this.isMobile === true) {
       this.isMobile = false
       const responsiveEvent = new CustomEvent('responsive update', {
         detail: { isMobile: this.isMobile },
       })
       document.body.dispatchEvent(responsiveEvent)
-    } else if (innerWidth <= this.mobileSize && !this.isMobile) {
+    } else if (innerWidth <= Responsive.mobileSize && this.isMobile === false) {
       this.isMobile = true
       const responsiveEvent = new CustomEvent('responsive update', {
         detail: { isMobile: this.isMobile },

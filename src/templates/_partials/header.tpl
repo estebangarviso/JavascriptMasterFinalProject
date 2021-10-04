@@ -18,7 +18,9 @@
 
                         <div class="col col-header-right text-end">
                             <div class="row justify-content-end">
-                                {{include file='src/templates/modules/currency-selector.tpl'}}
+                                {{if $modules.currencyselector.hook === "header"}}
+                                    {{include file='src/templates/modules/currency-selector.tpl'}}
+                                {{/if}}
                                 {{include file='src/templates/shoppingcart.tpl'}}
                             </div>
                         </div>
