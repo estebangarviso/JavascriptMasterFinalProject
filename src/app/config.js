@@ -41,18 +41,28 @@ exports.templateParameters = async (
   options
 ) => {
   const headTags = assetTags.headTags
-
   const headPlugins = headTags
     .filter((tag) => tag.meta.plugin !== 'html-webpack-plugin')
     .map((tag) => {
       if (
         process.env.PUBLIC_PATH &&
-        tag.meta.plugin === 'favicons-webpack-plugin'
+        tag.meta.plugin === 'favicons-webpack-plugin' &&
+        tag.attributes.href &&
+        /^\/img\/favicon/g.test(tag.attributes.href)
       ) {
         tag.attributes.href = process.env.PUBLIC_PATH + tag.attributes.href
+      } else if (
+        process.env.PUBLIC_PATH &&
+        tag.meta.plugin === 'favicons-webpack-plugin' &&
+        tag.attributes.content &&
+        /^\/img\/favicon/g.test(tag.attributes.content)
+      ) {
+        tag.attributes.content =
+          process.env.PUBLIC_PATH + tag.attributes.content
       }
       return tag.toString()
     })
+    .filter((tag, index, array) => array.indexOf(tag) === index)
     .join('')
 
   /**
@@ -72,7 +82,7 @@ exports.templateParameters = async (
     .filter(
       (tag) =>
         tag.meta.plugin === 'html-webpack-plugin' &&
-        /^(\/head\.js\??[\d\w]+|\/head\.min\.js\??[\d\w]+)$/.test(
+        /(\/head\.js\??[\d\w]+|\/head\.min\.js\??[\d\w]+)$/.test(
           tag.attributes.src
         )
     )
@@ -86,7 +96,7 @@ exports.templateParameters = async (
     .filter(
       (tag) =>
         tag.meta.plugin === 'html-webpack-plugin' &&
-        /^(\/body\.js\??[\d\w]+|\/body\.min\.js\??[\d\w]+)$/.test(
+        /(\/body\.js\??[\d\w]+|\/body\.min\.js\??[\d\w]+)$/.test(
           tag.attributes.src
         )
     )
@@ -104,8 +114,8 @@ exports.templateParameters = async (
 
 exports.favicons = {
   logo: 'assets/img/favicon/favicon.svg',
-  cache: true,
   prefix: 'img/favicon/',
+  inject: true,
   favicons: {
     appName: config.site_name,
     appShortName: config.site_name,
