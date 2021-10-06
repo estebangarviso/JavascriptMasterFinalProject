@@ -10,9 +10,6 @@ import config from 'app/config.defaults.json'
  * Use to manage all Javascript Object Notation (JSON) data
  */
 export default class Data {
-  static getProductById(id_product: number): ProductInterface | undefined {
-    throw new Error('Method not implemented.')
-  }
   private readonly defaults = {
     id_currency: config.id_currency,
     id_customer: config.id_customer,
