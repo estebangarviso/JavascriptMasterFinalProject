@@ -92,10 +92,10 @@ export default class FormField extends Component {
   }
 
   public refreshErrors() {
-    document
-      .getElementById(this.name)
-      .closest('.form-group')
-      .querySelector('.help-block').innerHTML = this.renderError
+    const field = document.getElementById(this.name)
+    if (field)
+      field.closest('.form-group').querySelector('.help-block').innerHTML =
+        this.renderError
   }
 
   public render(): string {

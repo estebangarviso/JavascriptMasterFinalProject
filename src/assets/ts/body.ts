@@ -1,7 +1,7 @@
 import { products, currencies, carriers, customers } from '@helpers/Promises'
 import Shoppingcart from '@components/shoppingcart'
 import AuthenticationForm from '@components/authentication'
-import Notifications from '@components/common/notifications'
+import Notifications from '@components/notifications'
 import Catalog from '@components/catalog'
 import Currency from '@components/modules/currency'
 import Data from '@helpers/Data'

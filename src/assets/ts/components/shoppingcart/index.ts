@@ -6,7 +6,7 @@ import Currency from '@components/modules/currency'
 import Carrier from '@components/common/carrier'
 import { ProductInterface } from '@interfaces'
 import Catalog from '@components/catalog'
-import Notifications from '@components/common/notifications'
+import Notifications from '@components/notifications'
 import Responsive from '@components/common/responsive'
 
 export default class Shoppingcart extends Component {
@@ -115,7 +115,7 @@ export default class Shoppingcart extends Component {
     }
   }
 
-  public toggleCartQtyIcon() {
+  public setVisibilityCartQtyIcon() {
     const desktopCartQtyIcon = document.getElementById(
       'desktop-cart-products-count'
     )
@@ -129,6 +129,11 @@ export default class Shoppingcart extends Component {
       desktopCartQtyIcon.classList.add('d-none')
       mobileCartQtyIcon.classList.add('d-none')
     }
+
+    if (mobileCartQtyIcon)
+      mobileCartQtyIcon.innerText = this.products_count + ''
+    if (desktopCartQtyIcon)
+      desktopCartQtyIcon.innerText = this.products_count + ''
   }
   public appendBlockcart() {
     const handler = (isMobile = Responsive.isMobileDevice) => {
@@ -156,7 +161,7 @@ export default class Shoppingcart extends Component {
     )
   }
 
-  public showCartContent() {
+  public setShowCartContent() {
     const desktopToggle = document.getElementById('cart-toogle')
     const mobileToggle = document.getElementById('mobile-cart-toogle')
     const closeCartBtn = document.getElementById('js-cart-close')
@@ -199,10 +204,10 @@ export default class Shoppingcart extends Component {
 
     if (closeCartBtn)
       closeCartBtn.addEventListener('click', handler.bind(this), false)
-    if (desktopToggle)
-      desktopToggle.addEventListener('click', handler.bind(this), false)
-
     if (!this.initialized) {
+      if (desktopToggle)
+        desktopToggle.addEventListener('click', handler.bind(this), false)
+
       if (mobileToggle)
         mobileToggle.addEventListener('click', handler.bind(this), false)
     }
@@ -226,7 +231,7 @@ export default class Shoppingcart extends Component {
 
     this.setQuantities()
     this.setSubtotals()
-    this.render()
+    //this.render()
     document.body.dispatchEvent(cartUpdatedEvent)
   }
 
@@ -461,28 +466,26 @@ export default class Shoppingcart extends Component {
       )
     this.render()
     this.appendBlockcart()
-
-    this.showCartContent()
+    this.setShowCartContent()
     this.setRemoveAllProducts()
     this.setConfirmationCart()
     this.setRemoveProduct()
-    this.toggleCartQtyIcon()
-    const desktopCartQtyIconText = document.getElementById(
-      'desktop-cart-products-count'
-    ).innerText
-    document.getElementById('mobile-cart-products-count').innerText =
-      desktopCartQtyIconText
+    this.setVisibilityCartQtyIcon()
+
     document.body.addEventListener('cart updated', () => {
-      this.showCartContent()
+      // Before setting functionalities
+      const cartInfo = document.getElementById('cart-info')
+      const blockcartContent = document.getElementById('blockcart-content')
+
+      if (cartInfo) cartInfo.innerHTML = this.renderCartInfo
+      if (blockcartContent) blockcartContent.innerHTML = this.renderCartContent
+
+      // Setting functionalities
+      this.setShowCartContent()
       this.setRemoveAllProducts()
       this.setConfirmationCart()
       this.setRemoveProduct()
-      this.toggleCartQtyIcon()
-      const desktopCartQtyIconText = document.getElementById(
-        'desktop-cart-products-count'
-      ).innerText
-      document.getElementById('mobile-cart-products-count').innerText =
-        desktopCartQtyIconText
+      this.setVisibilityCartQtyIcon()
     })
     this.initialized = true
   }
@@ -542,6 +545,12 @@ export default class Shoppingcart extends Component {
     }
   }
 
+  private get hasProducts(): boolean {
+    let isValid = true
+    if (this.products.length === 0) isValid = false
+    return isValid
+  }
+
   public render() {
     this.component.innerHTML = this.renderCart
   }
@@ -567,84 +576,90 @@ export default class Shoppingcart extends Component {
           <span class="title">Carro</span>
           <span class="cart-toggle-details">
             <span class="text-faded cart-separator"> / </span>
-            ${this.products_count > 0
-              ? `<span class="cart-products-count">(${
-                  this.products_count
-                })</span>
-            ${this.subtotals
-              .map((subtotal) =>
-                subtotal.type === 'products'
-                  ? `<span class="value" data-price content="${subtotal.amount}">${subtotal.value}</span>`
-                  : ``
-              )
-              .join('')}`
-              : `No hay productos en su carro`}
+            <div id="blockcart-info">${this.renderCartInfo}</div>
           </span>
         </span>
       </a>
-      ${this.renderCartContent}
-    </div>`
-  }
-  private get hasProducts(): boolean {
-    let isValid = true
-    if (this.products.length === 0) isValid = false
-    return isValid
-  }
-  private get renderCartContent() {
-    return /* HTML */ `<div
-      id="_desktop_blockcart-content"
-      class="dropdown-menu-custom dropdown-menu"
-    >
-      <div id="blockcart-content" class="blockcart-content">
-        <div class="cart-title">
-          <span class="modal-title">Su carro</span>
-          <button
-            type="button"
-            id="js-cart-close"
-            class="btn-close float-end"
-          ></button>
-          <hr />
+      <div
+        id="_desktop_blockcart-content"
+        class="dropdown-menu-custom dropdown-menu"
+      >
+        <div id="blockcart-content" class="blockcart-content">
+          ${this.renderCartContent}
         </div>
-        ${this.hasProducts
-          ? /* HTML */ `${this.renderCartProducts} ${this.renderCartSubtotals}
-              ${this.renderCartTotals}
-              <div class="cart-buttons text-center">
-                <a
-                  href="javascript:void(0)"
-                  id="shopping-cart-confirm-btn"
-                  class="btn btn-primary w-100 btn-lg mb-2"
-                >
-                  <i class="fab fa-paypal fa-fw" aria-hidden="true"></i>
-                  <i
-                    class="fas fa-circle-notch fa-spin fa-fw spinner-icon"
-                    aria-hidden="true"
-                  ></i
-                  >Realizar compra</a
-                >
-                <a
-                  href="javascript:void(0)"
-                  id="shopping-cart-restore-btn"
-                  class="btn btn-secondary w-100 btn-lg"
-                >
-                  Restaurar productos</a
-                >
-              </div> `
-          : `<span class="no-items">No hay más productos en su carro</span>`}
       </div>
     </div>`
   }
+  private get renderCartInfo() {
+    let result = ''
+    if (this.hasProducts) {
+      result = /* HTML */ `<span class="cart-products-count"
+          >(${this.products_count})</span
+        >
+        ${this.subtotals
+          .map((subtotal) =>
+            subtotal.type === 'products'
+              ? `<span class="value" data-price content="${subtotal.amount}">${subtotal.value}</span>`
+              : ``
+          )
+          .join('')}`
+    } else {
+      result = /* HTML */ `No hay productos en su carro`
+    }
+
+    return result
+  }
+  private get renderCartContent() {
+    return /* HTML */ ` <div class="cart-title">
+        <span class="modal-title">Su carro</span>
+        <button
+          type="button"
+          id="js-cart-close"
+          class="btn-close float-end"
+        ></button>
+        <hr />
+      </div>
+      ${this.hasProducts
+        ? /* HTML */ `<ul class="cart-products">
+              ${this.renderCartProducts}
+            </ul>
+            <div class="cart-subtotals">${this.renderCartSubtotals}</div>
+            <div class="cart-totals">${this.renderCartTotals}</div>
+            <div class="cart-buttons text-center">
+              <a
+                href="javascript:void(0)"
+                id="shopping-cart-confirm-btn"
+                class="btn btn-primary w-100 btn-lg mb-2"
+              >
+                <i class="fab fa-paypal fa-fw" aria-hidden="true"></i>
+                <i
+                  class="fas fa-circle-notch fa-spin fa-fw spinner-icon"
+                  aria-hidden="true"
+                ></i
+                >Realizar compra</a
+              >
+              <a
+                href="javascript:void(0)"
+                id="shopping-cart-restore-btn"
+                class="btn btn-secondary w-100 btn-lg"
+              >
+                Restaurar productos</a
+              >
+            </div> `
+        : `<span class="no-items">No hay más productos en su carro</span>`}`
+  }
   private get renderCartProducts() {
     if (this.hasProducts) {
-      return /* HTML */ `<ul class="cart-products">
+      return /* HTML */ `
         ${this.products
           .map((product) => `<li>${product.render()}</li>`)
           .join('')}
-      </ul> `
+      `
     } else return ''
   }
 
   private get renderCartSubtotals() {
-    return /* HTML */ `<div class="cart-subtotals">
+    return /* HTML */ `
       ${this.subtotals
         .map(
           (subtotal) => /* HTML */ `<div
@@ -661,17 +676,15 @@ export default class Shoppingcart extends Component {
           </div>`
         )
         .join('')}
-    </div>`
+    `
   }
 
   private get renderCartTotals() {
-    return /* HTML */ `<div class="cart-totals">
-      <div class="clearfix">
-        <span class="label">${this.total.label}</span>
-        <span class="value float-end" data-price content="${this.total.amount}"
-          >${this.total.value}</span
-        >
-      </div>
+    return /* HTML */ ` <div class="clearfix">
+      <span class="label">${this.total.label}</span>
+      <span class="value float-end" data-price content="${this.total.amount}"
+        >${this.total.value}</span
+      >
     </div>`
   }
 }

@@ -1,6 +1,6 @@
 import { NotificationInterface } from '@interfaces'
 import Component from '@helpers/Component'
-import { fadeOut } from './animations'
+import { fadeOut } from '../common/animations'
 
 export default class Notifications
   extends Component
