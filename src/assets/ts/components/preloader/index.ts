@@ -2,7 +2,7 @@ import { fadeOut } from '@components/common/animations'
 import Component from '@helpers/Component'
 
 export default class Preloader extends Component {
-  public get component() {
+  public get element() {
     return document.getElementById('page-preloader')
   }
   init() {
@@ -23,8 +23,8 @@ export default class Preloader extends Component {
     )
   }
   public allImagesLoaded() {
-    fadeOut(this.component, 2000, () => {
-      this.component.remove()
+    fadeOut(this.element, 2000, () => {
+      this.element.remove()
     })
   }
 

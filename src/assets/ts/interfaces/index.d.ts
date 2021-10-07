@@ -4,8 +4,8 @@
  * @interface
  */
 export default interface ComponentInterface {
-  get component(): HTMLElement
-  set component(element: HTMLElement)
+  get element(): HTMLElement
+  set element(element: HTMLElement)
   init(): void
 }
 

@@ -6,7 +6,7 @@ export default class Notifications
   extends Component
   implements NotificationInterface
 {
-  public get component() {
+  public get element() {
     return document.getElementById('js-notifications')
   }
   private _error: string
@@ -49,7 +49,7 @@ export default class Notifications
   }
 
   public render(): void {
-    this.component.innerHTML = `
+    this.element.innerHTML = `
         ${this.renderError}${this.renderWarning}${this.renderSuccess}${this.renderInfo}`
   }
 
@@ -58,10 +58,12 @@ export default class Notifications
    */
   private refresh(): void {
     const event = new Event('show notification')
-    const element = this.component
     document.body.dispatchEvent(event)
-    const alert = element.querySelector('.alert')
-    fadeOut(alert as HTMLElement, 5000, () => alert.remove())
+    const alert = this.element.querySelector('.alert')
+    setTimeout(
+      () => fadeOut(alert as HTMLElement, 5000, () => alert.remove()),
+      3000
+    )
     this.clean()
   }
 

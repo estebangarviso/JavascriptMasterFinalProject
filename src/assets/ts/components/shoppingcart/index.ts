@@ -8,9 +8,10 @@ import { ProductInterface } from '@interfaces'
 import Catalog from '@components/catalog'
 import Notifications from '@components/notifications'
 import Responsive from '@components/common/responsive'
+import { fileURLToPath } from 'url'
 
 export default class Shoppingcart extends Component {
-  public get component() {
+  public get element() {
     return document.getElementById('js-shopping-cart')
   }
   private initialized: boolean = false
@@ -310,8 +311,10 @@ export default class Shoppingcart extends Component {
           this.products = []
           this.refresh()
 
-          this.notifications.addSuccess =
-            '<i class="fas fa-check"></i> Gracias por su compra!😊'
+          this.notifications.addSuccess = /* HTML */ `<i
+              class="fas fa-check"
+            ></i>
+            Gracias por su compra!😊`
           btn.classList.remove('processing-purchase')
           addToCartBtns.forEach((btn) => btn.removeAttribute('disabled'))
         })
@@ -346,26 +349,46 @@ export default class Shoppingcart extends Component {
 
   public addProduct(id_product: number, quantity: number) {
     if (!this.isProductOutOfStock(id_product)) {
-      let _product = this.data.getProductById(id_product)
-      let product = new ShoppingcartProduct(this.currency, _product, quantity)
-      if (this.hasProducts) {
-        let cart_product = this.products.filter(
-          (product) => product.id_product === id_product
-        )[0]
+      const obj_product = this.data.getProductById(id_product)
+      const catalog_product = this.catalog.products.filter(
+        (product) => product.id_product === id_product
+      )[0]
+      let product = new ShoppingcartProduct(
+        this.currency,
+        obj_product,
+        quantity
+      )
+      if (catalog_product.stock >= quantity) {
+        if (this.hasProducts) {
+          let cart_product = this.products.filter(
+            (product) => product.id_product === id_product
+          )[0]
 
-        if (cart_product)
-          cart_product.fix = cart_product.cart_quantity + quantity
+          if (cart_product)
+            cart_product.fix = cart_product.cart_quantity + quantity
 
-        let rest_products = this.products.filter(
-          (product) => product.id_product !== id_product
-        )
-        if (cart_product) this.products = [...rest_products, cart_product]
-        else this.products = [...rest_products, product]
-      } else {
-        this.products.push(product)
+          let rest_products = this.products.filter(
+            (product) => product.id_product !== id_product
+          )
+          if (cart_product) this.products = [...rest_products, cart_product]
+          else this.products = [...rest_products, product]
+        } else {
+          this.products.push(product)
+        }
+        this.updateStock(id_product, quantity, false)
+        this.refresh()
+      } else if (catalog_product.stock < quantity) {
+        this.notifications.addWarning = /* HTML */ `<i
+            class="fas fa-exclamation"
+          ></i>
+          Agregar
+          ${quantity === 1 ? quantity + ' artículo' : quantity + ' artículos'}
+          excede el stock disponible. Solo puede agregar
+          ${catalog_product.stock === 1
+            ? catalog_product.stock + ' artículo'
+            : catalog_product.stock + ' artículos'}
+          a su carro`
       }
-      this.updateStock(id_product, quantity, false)
-      this.refresh()
     }
   }
 
@@ -425,12 +448,12 @@ export default class Shoppingcart extends Component {
     // Check if cart has products
     if (cart_products.length) {
       let products = cart_products.map((product) => {
-        let _product: ProductInterface = this.data.getProductById(
+        let obj_product: ProductInterface = this.data.getProductById(
           product.id_product
         )
         let cart_product = new ShoppingcartProduct(
           this.currency,
-          _product,
+          obj_product,
           product.cart_quantity
         )
 
@@ -500,8 +523,8 @@ export default class Shoppingcart extends Component {
     )[0]
     isOut = catalog_product.stock === 0
     if (isOut)
-      this.notifications.addError =
-        '<i class="fas fa-ban"></i> El producto se encuentra fuera de stock'
+      this.notifications.addError = /* HTML */ `<i class="fas fa-ban"></i> El
+        producto se encuentra fuera de stock`
     return isOut
   }
 
@@ -552,7 +575,7 @@ export default class Shoppingcart extends Component {
   }
 
   public render() {
-    this.component.innerHTML = this.renderCart
+    this.element.innerHTML = this.renderCart
   }
 
   public get renderCart() {

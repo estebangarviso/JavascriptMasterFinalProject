@@ -3,7 +3,7 @@ import ProductMiniature from '@components/catalog/ProductMiniature'
 import { CurrencyInterface, ProductInterface } from '@interfaces'
 
 export default class Catalog extends Component {
-  public get component() {
+  public get element() {
     return document.getElementById('js-products')
   }
   public products: ProductMiniature[]
@@ -22,8 +22,9 @@ export default class Catalog extends Component {
     this.render()
   }
   public render() {
-    this.component.innerHTML = this.renderProductList
+    this.element.innerHTML = this.renderProductList
   }
+  
   public sort(type: string, way: 'asc' | 'des') {
     let products = this.products
     switch (type) {
