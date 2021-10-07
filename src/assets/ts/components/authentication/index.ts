@@ -96,8 +96,7 @@ export default class AuthenticationForm extends AbstractForm {
    * */
   private customerPersist() {
     let isLogged = localStorage.getItem('isLogged')
-    if (isLogged) {
-    } else {
+    if (!isLogged) {
       localStorage.setItem('isLogged', JSON.stringify(false))
       isLogged = localStorage.getItem('isLogged')
       if (isLogged) {
@@ -139,12 +138,24 @@ export default class AuthenticationForm extends AbstractForm {
     // Add values to format
     this.addValues(form)
     // Proceed with validations
+    // Check if customer email exists
     const customerEmail = this.getValue('email')
+    const customerPassword = this.getValue('password')
     if (!this.customerExists(customerEmail)) {
       this.getField('email').addError('No esta registrado')
       return false
     } else {
       this.getField('email').errors = []
+      // if exist then instance customer and check if password is correct
+      const customer = this.data.getCustomerByEmail(customerEmail)
+      if (customer.password !== customerPassword) {
+        this.getField('password').addError(
+          'Contraseña incorrecta, intente nuevamente'
+        )
+        return false
+      } else {
+        this.getField('password').errors = []
+      }
     }
 
     return super.validate(form)
