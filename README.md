@@ -14,7 +14,7 @@ Here my progress in the course like tasks and related projects is stored.
 ### Features and explanations related to Javascript
 
 1. Typescript code eval sourcemap for development
-2. Babel Polyfill code for production and sourcem2. Babel Polyfill code for production and sourcemap
+2. Babel Polyfill code for production and sourcemap
 3. Responsive events: Check if window is in bootstrap mobile mode.
 4. Ecommerce components:
    1. Catalog: Synchronized with cart, increase or decrease quantity with horizontal touch spinner, adding a product of X quantity to cart.
@@ -101,7 +101,6 @@ npm run build
 ![JS Asynchronous / Synchronous](https://img.shields.io/badge/JS%20Asynchronous%20%2F%20Synchronous--F7DF1E?style=solid&labelColor=F7DF1E&logoColor=000000&logo=JavaScript)
 ![Design Patterns and Classes](https://img.shields.io/badge/Design%20Patterns%20and%20Classes--F7DF1E?style=solid&labelColor=F7DF1E&logoColor=000000&logo=JavaScript)
 ![React / Angular Fundamentals](https://img.shields.io/badge/React%20%2F%20Angular%20Fundamentals--F7DF1E?style=solid&labelColor=F7DF1E&logoColor=000000&logo=JavaScript)
-
 
 ### Contributions 🖇️
 
