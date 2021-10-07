@@ -11,7 +11,7 @@ Here my progress in the course like tasks and related projects is stored.
 
 - [Link](https://github.com/users/estebangarviso/projects/2)
 
-### Features and explanations related to Javascript
+### Code Explaining
 
 1. Typescript code eval sourcemap for development
 2. Babel Polyfill code for production and sourcemap
