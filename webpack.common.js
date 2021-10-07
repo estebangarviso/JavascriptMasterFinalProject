@@ -6,10 +6,13 @@ const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
 const miniSVGDataURI = require('mini-svg-data-uri')
-const { templateParameters, favicons } = require('./src/app/config')
-require('dotenv').config()
+const dotenv = require('dotenv')
 
 let config = (devMode = true, publicDir = 'dev') => {
+  if (!devMode)
+    dotenv.config({ path: path.resolve(process.cwd(), '.env.prod') })
+  else dotenv.config()
+  const { templateParameters, favicons } = require('./src/app/config')
   return {
     context: path.resolve(__dirname, 'src'),
     entry: {

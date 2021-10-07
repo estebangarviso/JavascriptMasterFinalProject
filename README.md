@@ -13,18 +13,20 @@ Here my progress in the course like tasks and related projects is stored.
 
 ### Code Explaining
 
+1. Node version is in .nvmrc file
+1. Webpack to compile all javascript modules: Code splitting config for development and production.
 1. Typescript code eval sourcemap for development
-2. Babel Polyfill code for production and sourcemap
-3. Responsive events: Check if window is in bootstrap mobile mode.
-4. Ecommerce components:
+1. Babel Polyfill code for production and sourcemap
+1. Responsive events: Check if window is in bootstrap mobile mode.
+1. Ecommerce components:
    1. Catalog: Synchronized with cart, increase or decrease quantity with horizontal touch spinner, adding a product of X quantity to cart.
    2. Shopping cart: Synchronized with catalog, buying products, removing all products inside, removing single line of products.
    3. Authentication Form: Allow to customer to add products to cart if is logged).
    4. Notifications: Allow to see errors, warnings, successes, informative notifications.
    5. Preloader: Allow to hide website content if all images are not loaded.
-5. Modules:
+1. Modules:
    1. Currency selector: Allow to select an specific currency and change all prices in real time (For this demo I use money exchange: 750CLP = 1USD).
-6. Helpers:
+1. Helpers:
    1. Abstract Form: Parent class form of authentication form, helps to create new form for future scaling, like registration, contact, subscription, address, etc.
    2. Component: Parent class components for ecommerce components, helps to use custom functions and indicate what functions you need to use
    3. Data: Store all functions to retrieve data like products or one by id, currencies or one by ID, carriers (by ID is not created yet), current shopping cart, last purchases.
@@ -32,8 +34,9 @@ Here my progress in the course like tasks and related projects is stored.
    5. Promises: Helper to simulate url async await promises with fetch for this demo.
    6. Validate: Static helper class to check values
    7. Validate Restrictions: Helper to manage validations messages of a form component
-7. Interfaces and Types used
-8. Main body script that is before body tag in order to wait all body content is loaded to be executed
+1. Interfaces and Types used
+1. Main body script that is before body tag in order to wait all body content is loaded to be executed
+1. Code formatter and lints for clean code typing like prettier, eslint and stylelint
 
 ## Install 🔧
 
@@ -78,22 +81,15 @@ npm run start
 npm run build
 ```
 
-###
-
 - Development port use port 3000 (Production don't use port http://localhost).
 - Visit base url [http://localhost:3000](http://localhost:3000) for development.
-- If you want to upload this project to a static server content, modify .env file with your server domain before running build npm script (ex: github pages, like https://estebangarviso.github.io/JavascriptMasterFinalProject/ that use build branch).
+- If you want to upload this project to a static server content, modify .env (start or dev script) or .env.prod (build script) file with your server domain before running build npm script (ex: github pages, like https://estebangarviso.github.io/JavascriptMasterFinalProject/ that use build branch).
 
 ### Status 📖
 
 ![GitHub branch checks state](https://img.shields.io/github/checks-status/estebangarviso/JavascriptMasterFinalProject/main?style=solid)
 
-### Style Frameworks and Libraries 🛠️
-
-![Bootstrap](https://img.shields.io/badge/Bootstrap-v5.1.0-7952B3?style=solid&logoColor=ffffff&labelColor=7952B3&logo=bootstrap)
-![Font Awesome](https://img.shields.io/badge/FontAwesome-v5.15-339AF0?style=solid&labelColor=339AF0&logoColor=ffffff&logo=FontAwesome)
-
-### Skills Learned 🛠️
+### Skills Learned and Applied 🛠️
 
 ![Pure JavaScript](https://img.shields.io/badge/Pure%20Javascript--F7DF1E?style=solid&labelColor=F7DF1E&logoColor=000000&logo=JavaScript)
 ![ECMAScript 6 & 7](https://img.shields.io/badge/ECMAScript-6%20%26%207-F7DF1E?style=solid&labelColor=F7DF1E&logoColor=000000&logo=JavaScript)
@@ -101,6 +97,15 @@ npm run build
 ![JS Asynchronous / Synchronous](https://img.shields.io/badge/JS%20Asynchronous%20%2F%20Synchronous--F7DF1E?style=solid&labelColor=F7DF1E&logoColor=000000&logo=JavaScript)
 ![Design Patterns and Classes](https://img.shields.io/badge/Design%20Patterns%20and%20Classes--F7DF1E?style=solid&labelColor=F7DF1E&logoColor=000000&logo=JavaScript)
 ![React / Angular Fundamentals](https://img.shields.io/badge/React%20%2F%20Angular%20Fundamentals--F7DF1E?style=solid&labelColor=F7DF1E&logoColor=000000&logo=JavaScript)
+
+### Main Packages Modules 🛠️
+
+- JS: ![Typescript](https://img.shields.io/badge/TypeScript-v4.3.5-3178C6?style=solid&labelColor=3178C6&logoColor=ffffff&logo=TypeScript)
+- HTML: ![JSmart](https://img.shields.io/badge/JSmart-v3.1.0-F0C040?style=solid&labelColor=F0C040&logoColor=ffffff&logo=JavaScript)
+- CSS:
+  - ![Sass](https://img.shields.io/badge/Sass-v1.42.1-CC6699?style=solid&labelColor=CC6699&logoColor=ffffff&logo=Sass)
+  - ![Bootstrap](https://img.shields.io/badge/Bootstrap-v5.1.0-7952B3?style=solid&logoColor=ffffff&labelColor=7952B3&logo=bootstrap)
+  - ![Font Awesome](https://img.shields.io/badge/FontAwesome-v5.15-339AF0?style=solid&labelColor=339AF0&logoColor=ffffff&logo=FontAwesome)
 
 ### Contributions 🖇️
 

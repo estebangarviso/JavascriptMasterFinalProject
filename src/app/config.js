@@ -1,7 +1,7 @@
 const config = require('./config.defaults.json')
 const currencies = require('../json/currencies.json')
 const author = require('../../package.json').author
-require('dotenv').config()
+
 const defaultParameters = {
   iso_code: config.iso_code,
   lang: config.lang,
